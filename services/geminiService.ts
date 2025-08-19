@@ -59,14 +59,12 @@ export const createChatSession = (): Chat => {
   return chat;
 };
 
-export const sendMessageToBot = async (chat: Chat, message: string): Promise<string[]> => {
-  let responseText = '';
-  try {
-    // 1. Retrieve context using RAG
-    const context = retrieveContext(message);
+export const streamMessageToBot = async (chat: Chat, message: string) => {
+  // 1. Retrieve context using RAG
+  const context = retrieveContext(message);
 
-    // 2. Construct the augmented message for the model
-    const augmentedMessage = `
+  // 2. Construct the augmented message for the model
+  const augmentedMessage = `
 Com base no contexto fornecido abaixo, responda à pergunta do usuário.
 Se o contexto não for relevante para a pergunta, responda com base no seu conhecimento geral, sempre seguindo suas diretrizes de persona.
 
@@ -76,44 +74,6 @@ ${context}
 
 Pergunta do Usuário: "${message}"
 `;
-
-    const response = await chat.sendMessage({ message: augmentedMessage });
-    responseText = response.text.trim();
-    
-    // The response should be a JSON array of strings
-    const parsedResponse = JSON.parse(responseText);
-
-    if (Array.isArray(parsedResponse) && parsedResponse.every(item => typeof item === 'string')) {
-      return parsedResponse;
-    } else {
-      console.error("Gemini response is not a valid JSON array of strings:", responseText);
-      return ["Desculpe, não consegui processar a resposta corretamente. Por favor, tente reformular sua pergunta."];
-    }
-  } catch (error) {
-    console.error("Error sending message to Gemini or parsing JSON:", error);
-
-    // If JSON.parse failed, responseText likely has content. Let's try to salvage it.
-    if (responseText) {
-        const startIndex = responseText.indexOf('[');
-        const endIndex = responseText.lastIndexOf(']');
-
-        if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
-            const jsonString = responseText.substring(startIndex, endIndex + 1);
-            try {
-                const parsedFallback = JSON.parse(jsonString);
-                if (Array.isArray(parsedFallback) && parsedFallback.every(item => typeof item === 'string')) {
-                    console.warn("Successfully parsed JSON using fallback logic.");
-                    return parsedFallback;
-                }
-            } catch (e) {
-                console.error("Fallback JSON parsing also failed.", e);
-            }
-        }
-    }
-    
-    if (error instanceof SyntaxError && error.message.includes('JSON')) {
-        return ["Ocorreu um erro de comunicação. Tente novamente."];
-    }
-    return ["Desculpe, estou com dificuldades para me conectar. Por favor, tente novamente mais tarde."];
-  }
+  // 3. Return the stream from the chat session
+  return chat.sendMessageStream({ message: augmentedMessage });
 };

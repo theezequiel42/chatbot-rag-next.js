@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { Chat } from '@google/genai';
 import { ChatMessage, Sender } from '../types';
-import { createChatSession, sendMessageToBot } from '../services/geminiService';
+import { createChatSession, streamMessageToBot } from '../services/geminiService';
 import MessageBubble from './MessageBubble';
 
 const QUICK_REPLIES = [
@@ -75,34 +75,51 @@ const ChatInterface: React.FC = () => {
     setInput('');
     setIsLoading(true);
 
-    let botResponses: string[] = [];
-
     try {
-      botResponses = await sendMessageToBot(chat, messageText);
+      const stream = await streamMessageToBot(chat, messageText);
+      let responseBuffer = '';
+      
+      for await (const chunk of stream) {
+        responseBuffer += chunk.text;
+        const potentialMessages = responseBuffer.split('|||');
 
-      botResponses.forEach((text, index) => {
-        setTimeout(() => {
-          const botMessage: ChatMessage = {
-            id: `bot-${Date.now()}-${index}`,
-            text,
-            sender: Sender.Bot,
-          };
-          setMessages((prev) => [...prev, botMessage]);
-        }, (index + 1) * 600);
-      });
+        if (potentialMessages.length > 1) {
+          const completeMessages = potentialMessages.slice(0, -1);
+          responseBuffer = potentialMessages.slice(-1)[0]; // The last part is the new buffer
+
+          completeMessages.forEach((text) => {
+            if (text.trim()) {
+              const botMessage: ChatMessage = {
+                id: `bot-${Date.now()}-${Math.random()}`, // Use random to help ensure unique key
+                text: text.trim(),
+                sender: Sender.Bot,
+              };
+              setMessages((prev) => [...prev, botMessage]);
+            }
+          });
+        }
+      }
+
+      // After the stream is done, process any remaining text in the buffer
+      if (responseBuffer.trim()) {
+        const botMessage: ChatMessage = {
+          id: `bot-${Date.now()}-${Math.random()}`,
+          text: responseBuffer.trim(),
+          sender: Sender.Bot,
+        };
+        setMessages((prev) => [...prev, botMessage]);
+      }
+
     } catch (error) {
       console.error('Failed to get response from bot:', error);
       const errorMessage: ChatMessage = {
         id: `bot-error-${Date.now()}`,
-        text: 'Desculpe, ocorreu um erro. Por favor, tente novamente.',
+        text: 'Desculpe, ocorreu um erro de comunicação. Por favor, tente novamente.',
         sender: Sender.Bot,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      const totalWaitTime = (botResponses.length > 0 ? botResponses.length : 1) * 600;
-      setTimeout(() => {
-        setIsLoading(false);
-      }, totalWaitTime);
+      setIsLoading(false);
     }
   };
   
@@ -118,8 +135,8 @@ const ChatInterface: React.FC = () => {
           {messages.map((msg) => (
             <MessageBubble key={msg.id} message={msg} />
           ))}
-          {isLoading && (
-            <MessageBubble 
+          {isLoading && messages[messages.length - 1]?.sender === Sender.User && (
+             <MessageBubble 
               message={{id: 'loading', sender: Sender.Bot, text: ''}} 
               isLoading={true} 
             />
@@ -142,7 +159,11 @@ const ChatInterface: React.FC = () => {
       </div>
       <div className="p-4 bg-white border-t border-gray-200">
         <form onSubmit={handleFormSubmit} className="flex items-center space-x-3">
+          <label htmlFor="chat-input" className="sr-only">
+            Digite sua mensagem
+          </label>
           <input
+            id="chat-input"
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -155,8 +176,9 @@ const ChatInterface: React.FC = () => {
             type="submit"
             disabled={isLoading || !input.trim() || showQuickReplies}
             className="bg-pink-600 text-white font-semibold w-12 h-12 rounded-full hover:bg-pink-700 disabled:bg-pink-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
+            aria-label="Enviar mensagem"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
             </svg>
           </button>
