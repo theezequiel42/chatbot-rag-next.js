@@ -6,14 +6,15 @@ Um chatbot inteligente desenvolvido em React que oferece suporte, informações 
 
 ## 🎯 Sobre o Projeto
 
-Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google Gemini) para fornecer um espaço seguro de conversa, orientação e conscientização sobre violência doméstica. O sistema implementa RAG (Retrieval-Augmented Generation) para oferecer respostas precisas e contextualizadas.
+Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google Gemini) para fornecer um espaço seguro de conversa, orientação e conscientização sobre violência doméstica. O sistema implementa uma forma avançada de RAG (Retrieval-Augmented Generation) para oferecer respostas precisas e contextualizadas, rodando inteiramente no navegador do usuário para máxima privacidade.
 
 ## ✨ Funcionalidades
 
 - 💬 Interface de chat intuitiva e responsiva
 - 🧠 IA conversacional com Google Gemini
-- 📚 Base de conhecimento especializada em violência doméstica
-- 🔒 Ambiente seguro e confidencial
+- 🔍 Busca Híbrida (Semântica + Palavra-chave) com RRF para máxima precisão
+- 🚀 RAG 100% client-side com TensorFlow.js para maior privacidade
+- 🔒 Ambiente seguro e confidencial com botão de "Saída Rápida"
 - 📱 Design responsivo para dispositivos móveis
 
 ## 🚀 Tecnologias
@@ -21,12 +22,25 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 - **React 19** - Interface de usuário
 - **TypeScript** - Tipagem estática
 - **Vite** - Build tool e desenvolvimento
-- **Google Gemini AI** - Modelo de linguagem
-- **Tailwind CSS** - Estilização (inferido do código)
+- **Google Gemini AI** - Modelo de linguagem generativo
+- **TensorFlow.js** - Machine learning no navegador
+- **Universal Sentence Encoder** - Modelo para geração de embeddings de texto
+- **Tailwind CSS** - Estilização
+
+## 🧠 RAG com Busca Híbrida (Client-Side)
+O Anjo Amigo utiliza um sistema RAG avançado que roda inteiramente no navegador do usuário para garantir privacidade e precisão. A abordagem combina duas técnicas de busca para obter resultados superiores:
+
+1.  **Busca Semântica**: Usamos o **Universal Sentence Encoder** (via TensorFlow.js) para converter tanto a base de conhecimento quanto as perguntas do usuário em vetores numéricos (embeddings). Isso permite que o sistema entenda a *intenção* e o *significado* da pergunta, encontrando trechos conceitualmente relevantes.
+
+2.  **Busca por Palavra-chave**: Em paralelo, um sistema de busca tradicional analisa a correspondência de termos exatos entre a pergunta e os documentos da base de conhecimento. Isso é crucial para encontrar informações específicas como nomes, endereços e telefones.
+
+3.  **Reciprocal Rank Fusion (RRF)**: Os resultados de ambas as buscas são combinados de forma inteligente usando o algoritmo RRF. Ele dá uma pontuação maior aos documentos que aparecem bem classificados nas duas listas, equilibrando a busca por significado com a busca por termos exatos.
+
+4.  **Contexto Aumentado**: Os trechos mais relevantes da busca híbrida são recuperados e fornecidos como contexto para o Google Gemini, garantindo que as respostas sejam precisas, relevantes e consistentes.
 
 ## 📋 Pré-requisitos
 
-- Node.js (versão 16 ou superior)
+- Node.js (versão 18 ou superior)
 - npm ou yarn
 - Chave de API do Google Gemini
 
@@ -35,7 +49,7 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 1. **Clone o repositório**
    ```bash
    git clone <url-do-repositorio>
-   cd chatbot-rag-next.js
+   cd anjo-amigo
    ```
 
 2. **Instale as dependências**
@@ -44,13 +58,9 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
    ```
 
 3. **Configure as variáveis de ambiente**
-   ```bash
-   cp .env.local.example .env.local
+   Crie um arquivo `.env` na raiz do projeto e adicione sua chave da API do Google Gemini:
    ```
-   
-   Adicione sua chave da API do Google Gemini no arquivo `.env.local`:
-   ```
-   VITE_GEMINI_API_KEY=sua_chave_aqui
+   API_KEY=sua_chave_aqui
    ```
 
 4. **Execute o projeto**
@@ -59,7 +69,7 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
    ```
 
 5. **Acesse a aplicação**
-   Abra [http://localhost:5173](http://localhost:5173) no seu navegador
+   Abra o endereço fornecido no terminal (geralmente [http://localhost:5173](http://localhost:5173)) no seu navegador.
 
 ## 🏗️ Scripts Disponíveis
 
@@ -74,21 +84,16 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 │   ├── ChatInterface.tsx    # Interface principal do chat
 │   └── MessageBubble.tsx    # Componente de mensagens
 ├── services/
-│   └── geminiService.ts     # Integração com Google Gemini
+│   ├── embeddingService.ts  # Lógica para gerar embeddings com TensorFlow.js
+│   ├── geminiService.ts     # Integração com Google Gemini
+│   ├── ragService.ts        # Lógica de RAG (Busca Híbrida, RRF)
+│   └── vectorUtils.ts       # Funções matemáticas para vetores
 ├── App.tsx                  # Componente principal
 ├── constants.ts             # Constantes da aplicação
-├── knowledgeBase.ts         # Base de conhecimento RAG
+├── knowledgeBase.ts         # Base de conhecimento para o RAG
 ├── types.ts                 # Definições de tipos TypeScript
-└── index.tsx               # Ponto de entrada da aplicação
+└── index.tsx                # Ponto de entrada da aplicação
 ```
-
-## 🔧 Configuração da API
-
-Para usar o Google Gemini:
-
-1. Acesse [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Crie uma nova chave de API
-3. Adicione a chave no arquivo `.env.local`
 
 ## 🚨 Informações Importantes
 
@@ -106,14 +111,7 @@ Para usar o Google Gemini:
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 📞 Recursos de Ajuda
-
-- **Ligue 180** - Central de Atendimento à Mulher
-- **Ligue 190** - Polícia Militar (emergências)
-- **Ligue 197** - Polícia Civil
-- **WhatsApp 61 99656-5008** - Ouvidoria da Mulher
+Este projeto está sob a licença MIT.
 
 ---
 

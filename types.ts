@@ -9,3 +9,11 @@ export interface ChatMessage {
   text: string;
   sender: Sender;
 }
+
+export interface KnowledgeChunk {
+  id: string;
+  title: string;
+  content: string;
+  type: 'contato' | 'definicao' | 'servico' | 'procedimento' | 'emergencia' | 'geral';
+  tags: string[];
+}

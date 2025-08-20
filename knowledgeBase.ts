@@ -1,317 +1,320 @@
 // knowledgeBase.ts
-
-export const KNOWLEDGE_BASE_CONTENT = `
-TÍTULO: Apresentação da Rede de Atendimento à Mulher Vítima de Violência em Fraiburgo
-Este é o Protocolo de Atendimento à Mulher Vítima de Violência Doméstica do Município de Fraiburgo. O objetivo é apresentar à população a rede de atendimento e os serviços disponíveis. A violência doméstica é qualquer ação que cause morte, lesão, sofrimento físico, sexual ou psicológico e dano moral ou patrimonial. O Município busca criar estratégias de enfrentamento, prevenção e atenção à violência. Este protocolo organiza os atendimentos para garantir atenção integral a todos os casos.
-
-TÍTULO: Público-Alvo da Rede de Proteção
-Mulheres acima de 18 anos em situação ou risco de violência residentes em Fraiburgo.
-
-TÍTULO: Objetivo da Rede de Proteção
-Apresentar a Rede de Proteção e Atendimento à Mulher Vítima de Violência Doméstica em Fraiburgo e os procedimentos adotados pelos serviços, com a finalidade de oferecer atendimento organizado, integral e humanizado, evitando a revitimização e fortalecendo a rede de suporte.
-
-TÍTULO: O que é Violência Contra a Mulher?
-A violência contra as mulheres é uma violação dos direitos humanos e um grave problema social e de saúde pública, definida pela Lei Maria da Penha (Lei n. 11.340/2006). É o uso intencional da força ou poder que resulte em lesão, morte, dano psicológico ou privação.
-
-TÍTULO: Tipos de Violência - Violência Física
-Violência Física é qualquer conduta que ofenda a integridade ou saúde corporal. Exemplos: empurrões, tapas, chutes, arranhões, puxar o cabelo, cuspir, sufocamento, estrangulamento, jogar objetos, uso de armas ou tortura.
-
-TÍTULO: Tipos de Violência - Violência Psicológica
-Violência Psicológica é qualquer conduta que cause dano emocional, diminuição da autoestima, ou que vise controlar ações, comportamentos e decisões através de ameaça, constrangimento, humilhação, manipulação, isolamento, vigilância constante, insulto, chantagem ou ridicularização. Exemplos: humilhar em público, xingamentos, ameaçar, menosprezar, proibir acesso a amigos e familiares.
-
-TÍTULO: Tipos de Violência - Violência Sexual
-Violência Sexual é qualquer conduta que constranja a presenciar, manter ou participar de relação sexual não desejada; que impeça o uso de método contraceptivo; ou que force ao matrimônio, gravidez, aborto ou prostituição. Exemplos: estupro, forçar sexo com outras pessoas, impedir o uso de contraceptivos, filmar momentos íntimos sem consentimento.
-
-TÍTULO: Tipos de Violência - Violência Patrimonial
-Violência Patrimonial é qualquer conduta que configure retenção, subtração ou destruição de objetos, instrumentos de trabalho, documentos pessoais, bens e valores. Exemplos: impedir a mulher de trabalhar, controlar o dinheiro, destruir documentos, não pagar pensão alimentícia, quebrar objetos pessoais.
-
-TÍTULO: Tipos de Violência - Violência Moral
-Violência Moral é qualquer conduta que configure calúnia, difamação ou injúria. Exemplos: acusar de crimes não cometidos, publicar fotos íntimas, espalhar mentiras para prejudicar a reputação, xingar com palavras que ofendam a dignidade.
-
-TÍTULO: Rede Protetiva de Atendimento a Mulher de Fraiburgo - Lista de Órgãos
-A rede inclui: Centro de Referência Especializado em Assistência Social (CREAS), Centro de Referência em Assistência Social (CRAS), Secretaria Municipal de Assistência Social, Secretaria Municipal de Educação, Conselho Municipal de Direitos da Mulher (CMDM), Procuradoria Especial da Mulher, Secretaria de Saúde, Hospital Fraiburgo, SAMU, Vigilância Epidemiológica, Polícia Civil (Sala Lilás), Polícia Militar (Rede Catarina), Corpo de Bombeiros, Ministério Público, Poder Judiciário e OAB Por Elas.
-
-TÍTULO: Como Funciona a Rede de Atendimento
-Todos os serviços da Rede Protetiva são uma porta de entrada para o atendimento. Eles devem acolher de forma qualificada e encaminhar os casos. A Polícia Civil é a referência para o atendimento inicial. Casos de risco iminente de vida devem ser encaminhados para serviços de saúde (hospital, pronto atendimento). Todos os casos devem ser comunicados à vigilância epidemiológica.
-
-TÍTULO: Sigilo e Acolhimento no Atendimento
-Os profissionais devem manter sigilo total sobre as informações pessoais. O atendimento deve ser feito sem julgamentos, com qualidade e respeito à autonomia da mulher. Todas as instituições devem oferecer um acolhimento solidário, informando sobre os procedimentos e possibilidades de proteção para que a mulher se sinta segura e apoiada.
-
-TÍTULO: Atribuições do CREAS (Centro de Referência Especializado em Assistência Social)
-O CREAS oferece atendimento psicossocial, ajuda a obter benefícios como cesta básica e aluguel social, rompe com padrões de violência, e encaminha para outros serviços da rede.
-
-TÍTULO: Atribuições do CRAS (Centro de Referência em Assistência Social)
-O CRAS previne situações de risco e fortalece vínculos familiares. Oferece acompanhamento familiar, avaliação para benefícios, inclusão no Cadastro Único e encaminhamentos para a rede.
-
-TÍTULO: Atribuições da Secretaria Municipal de Assistência Social
-Responsável pela gestão da política de assistência social, oferece benefícios eventuais, encaminha para assistência jurídica, e, em casos graves, para casa de acolhimento.
-
-TÍTULO: Papel da Secretaria Municipal de Educação
-A escola tem um papel importante na identificação da violência familiar através do comportamento dos alunos. Professores e gestores devem acolher, orientar e encaminhar os casos para a rede de proteção, como o Conselho Tutelar e o CREAS.
-
-TÍTULO: Atribuições do Conselho Municipal de Direitos da Mulher (CMDM)
-O CMDM fiscaliza e avalia as políticas públicas para mulheres. Promove a articulação entre os órgãos para o enfrentamento da violência e acompanha a qualidade do atendimento.
-
-TÍTULO: Atribuições da Procuradoria Especial da Mulher
-Atua na Câmara Municipal para defender a igualdade e combater a violência. Fiscaliza o Poder Executivo, sugere leis e encaminha denúncias aos órgãos competentes.
-
-TÍTULO: Papel da Secretaria de Saúde e Unidades de Saúde
-Profissionais de saúde devem estar atentos para identificar sinais de violência. Devem prestar atendimento, orientar, e comunicar a autoridade policial em até 24 horas. Em casos de violência sexual, encaminham para a Vigilância Epidemiológica.
-
-TÍTULO: Atribuições do Hospital Fraiburgo
-O hospital oferece atendimento humanizado, acolhe mulheres em situação de violência, orienta sobre o registro de Boletim de Ocorrência, aciona a rede de apoio e comunica a autoridade policial.
-
-TÍTULO: Atribuições do SAMU (Serviço de Atendimento Móvel de Urgência)
-O SAMU, acionado pelo 192, presta atendimento de urgência, acolhe a paciente em um ambiente seguro, e a encaminha para o serviço de saúde adequado, solicitando apoio policial se necessário.
-
-TÍTULO: Atribuições da Vigilância Epidemiológica
-Coleta e monitora dados sobre casos de violência para identificar padrões e fatores de risco. Em casos de violência sexual, realiza a profilaxia para Infecções Sexualmente Transmissíveis (ISTs).
-
-TÍTULO: Atribuições da Polícia Civil – Sala Lilás
-A Polícia Civil investiga crimes, registra o Boletim de Ocorrência, solicita Medidas Protetivas de Urgência ao Poder Judiciário, encaminha a vítima para exames e informa sobre seus direitos.
-
-TÍTULO: Atribuições da Polícia Militar – Rede Catarina
-A Rede Catarina é um programa da Polícia Militar para prevenir a violência doméstica. Realiza visitas preventivas, orienta as vítimas e oferece o aplicativo PMSC Cidadão com um "botão de pânico" para emergências.
-
-TÍTULO: Atribuições do Corpo de Bombeiros
-Acionado pelo 193, o Corpo de Bombeiros presta atendimento de emergência, oferecendo suporte físico e emocional à vítima e acionando apoio policial quando necessário para garantir a segurança da cena.
-
-TÍTULO: Atribuições do Ministério Público
-O Ministério Público defende a ordem jurídica e os interesses sociais. Promove ações penais para responsabilizar os agressores, fiscaliza a rede de atendimento e pode requisitar medidas de proteção.
-
-TÍTULO: Papel do Poder Judiciário
-O Poder Judiciário julga os casos de violência doméstica, aplica a Lei Maria da Penha, defere medidas protetivas de urgência e fiscaliza o cumprimento das penas, buscando garantir a justiça e a segurança das vítimas.
-
-TÍTULO: Atribuições da OAB Por Elas
-É um projeto que oferece assistência jurídica gratuita para mulheres de baixa renda em situação de violência. Advogados voluntários orientam e atuam nos casos a partir do registro do Boletim de Ocorrência.
-
-TÍTULO: EMERGÊNCIA - NÚMEROS IMPORTANTES
-Para emergências, ligue imediatamente:
-Polícia Militar: 190
-SAMU (Atendimento Móvel de Urgência): 192
-Corpo de Bombeiros: 193
-
-TÍTULO: CONTATO - CREAS (Centro de Referência Especializado de Assistência Social)
-Serviços: Atendimento psicossocial, auxílio com benefícios (cesta básica, aluguel social), encaminhamentos para a rede, cursos profissionalizantes.
-Endereço: Av. Paraná, 677, Bairro Jardim das Hortênsias, Fraiburgo - SC.
-Telefone: (49) 3246-2826
-Horário: 8h às 12h e das 13h30min às 17h30min.
-
-TÍTULO: CONTATO - CRAS (Centro de Referência de Assistência Social)
-Serviços: Inclusão em grupos de fortalecimento de vínculos, Cadastro Único, avaliação para benefícios, encaminhamentos para a rede.
-Endereço: Av. Pedro Antonio Gianelo, 1142-1214, Bairro São Miguel, Fraiburgo - SC.
-Telefone: (49) 3256-3069 e (49) 3256-3095
-Horário: 7h45min às 11h45min e das 13h15min às 17h15min.
-
-TÍTULO: CONTATO - Secretaria Municipal de Assistência Social
-Serviços: Estudo social, Cadastro Único, fornecimento de Benefícios Eventuais (cesta básica, passagens), encaminhamento para confecção de documentos e para a rede de apoio.
-Endereço: Rua Arnoldo Frey, 179, Bairro Centro, Fraiburgo-SC.
-Telefone: (49) 3908-2025 ou (49) 3908-2035 ou (49) 99197-7530
-Horário: 8h às 12h e das 13h30min às 17h30min.
-
-TÍTULO: CONTATO - Secretaria Municipal de Educação (SME)
-Serviços: Realiza campanhas preventivas e aciona órgãos competentes em casos suspeitos ou confirmados envolvendo educandos.
-Endereço: Av. Adalberto Schmidt Burda, 100, Bairro São José, Fraiburgo - SC.
-Telefone: (49) 3256-4250
-Horário: 8h às 12h e das 13h30min às 17h30min.
-
-TÍTULO: CONTATO - Conselho Municipal dos Direitos da Mulher (CMDM)
-Serviços: Articula o enfrentamento à violência, referencia para a rede de atendimento.
-Endereço: R. Arnoldo Frey, 179, Bairro Centro, Fraiburgo-SC.
-Telefone: (49) 3908-2025 e (49) 3908-2035
-Horário: 8h às 12h e das 13h30min às 17h30min.
-
-TÍTULO: CONTATO - Procuradoria Especial da Mulher na Câmara Municipal
-Serviços: Articulação entre órgãos, fomento ao trabalho em rede, encaminhamentos.
-Endereço: Av. Lebon Régis, 219, Bairro São José, Fraiburgo - SC.
-Telefone: (49) 3246-2764
-Horário: 13h30min às 17h30min.
-
-TÍTULO: CONTATO - Secretaria Municipal de Saúde
-Serviços: Encaminhamento para vigilância epidemiológica (violência sexual), orientação para registro de B.O., apoio psicológico e social.
-Endereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.
-Telefone: (49) 3256-4000 ou (49) 3256-4029.
-
-TÍTULO: CONTATO - Hospital Fraiburgo
-Serviços: Atendimento de saúde, avaliação psicossocial, orientação para registro de B.O., comunicação à autoridade policial.
-Endereço: Av. João Marques Vieira, 979, Bairro Centro, Fraiburgo – SC.
-Telefone: (49) 3246-1012.
-
-TÍTULO: CONTATO - SAMU (Serviço Móvel de Urgência)
-Serviços: Socorro em emergências.
-Endereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.
-Telefone: 192.
-
-TÍTULO: CONTATO - Vigilância Epidemiológica
-Serviços: Atendimento e profilaxia para vítimas de violência sexual.
-Endereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.
-Telefone: (49) 3256-4043
-Horário: 8h às 12h e das 13h30min às 17h30min.
-
-TÍTULO: CONTATO - Polícia Civil (Delegacia de Polícia/Sala Lilás)
-Serviços: Confecção de Boletim de Ocorrência, pedido de medida protetiva, encaminhamento para IML, investigação.
-Endereço: Av. Caçador, 593, Bairro São José, Fraiburgo - SC.
-Telefone: (49) 3533-5456
-Horário: 12h às 19h.
-
-TÍTULO: CONTATO - Polícia Militar / Rede Catarina
-Serviços: Atendimento policial, visitas preventivas (Rede Catarina), orientação sobre o "botão do pânico".
-Endereço: R. das Azaléias, 1.145, Bairro Jardim das Hortênsias, Fraiburgo - SC.
-Telefone de Emergência: 190.
-Outro Telefone: (49) 3554-8904
-Horário: 24 horas.
-
-TÍTULO: CONTATO - Corpo de Bombeiros
-Serviços: Socorro em emergências.
-Endereço: Av. Caçador, 582, Bairro São José, Fraiburgo - SC.
-Telefone: 193.
-
-TÍTULO: CONTATO - Ministério Público de Santa Catarina
-Serviços: Acolhimento de denúncias, requisição de inquérito, medidas de prevenção.
-Endereço: Anexo Fórum de Fraiburgo, Av. Curitibanos, 375, Bairro Centro, Fraiburgo - SC.
-Telefone: (49) 99188-2795
-Horário: 12h às 19h.
-
-TÍTULO: CONTATO - Poder Judiciário de Santa Catarina – Comarca de Fraiburgo
-Serviços: Julgamento de processos, deferimento de medidas protetivas.
-Endereço: Av. Curitibanos, 375, Centro, Fraiburgo - SC.
-Telefone: (49) 3521-8216
-Horário: 12h às 19h.
-
-TÍTULO: CONTATO - OAB Por Elas
-Serviços: Orientação e assistência jurídica gratuita para mulheres de baixa renda.
-Endereço: Sede OAB, Rua Antonio Porto Burda, s/n, Bairro Centro, Fraiburgo - SC.
-Telefone: (49) 3246-2090
-Horário: 13h às 19h.
-
-TÍTULO: Estimativa Populacional Feminina em Fraiburgo
-Estima-se que o município tenha cerca de 17.513 mulheres entre 1 e 80 anos, o que reforça a importância de políticas públicas contínuas para o enfrentamento da violência doméstica.
-
-TÍTULO: Objetivo Geral do Protocolo
-Apresentar a Rede de Proteção e os procedimentos adotados pelos serviços especializados em Fraiburgo, garantindo atendimento integral, humanizado e organizado às mulheres em situação de violência.
-
-TÍTULO: Objetivos Específicos do Protocolo
-- Organizar fluxos municipais de atendimento e encaminhamento.
-- Qualificar o atendimento, evitando revitimização e retrabalho.
-- Fortalecer a rede de suporte intersetorial, com foco em prevenção e apoio integral.
-- Identificar precocemente fatores de risco individuais, familiares ou sociais.
-- Padronizar os fluxos de atendimento e encaminhamento.
-- Estimular experiências locais de prevenção e atendimento.
-- Promover reflexão com autores de violência, incentivando relacionamentos não violentos.
-- Incluir a família no processo de resiliência e acompanhamento.
-- Garantir encaminhamento eficiente e responsabilização dos agressores.
-
-TÍTULO: Definições Conceituais – Violência de Gênero
-Violência de gênero é entendida como ato que causa dano físico ou emocional, praticado em relações de poder desiguais entre gêneros. Pode ocorrer entre parceiros íntimos ou em outros contextos relacionais.
-
-TÍTULO: Procedimentos Gerais da Rede
-- Todos os serviços são portas de entrada para o atendimento.
-- A Polícia Civil é referência para o atendimento inicial e encaminhamentos.
-- Casos de risco iminente devem ser direcionados prioritariamente à saúde.
-- Todos os casos devem ser comunicados à Vigilância Epidemiológica.
-- O preenchimento da Ficha de Notificação do SINAN é obrigatório nos casos atendidos na saúde.
-
-TÍTULO: Ética e Sigilo no Atendimento
-Profissionais devem manter sigilo absoluto, sem julgamentos, respeitando a autonomia da mulher. O atendimento deve ser de qualidade, especializado e em rede, garantindo integralidade das ações.
-
-TÍTULO: Ativação da Rede de Atendimento
-A comunicação e articulação entre os serviços é essencial para o funcionamento da rede. O compartilhamento de saberes fortalece a intersetorialidade e garante respostas rápidas e integradas.
-
-TÍTULO: Acolhimento Solidário
-As instituições devem oferecer acolhimento sem julgamentos, utilizando linguagem simples e garantindo que a mulher compreenda seus direitos e procedimentos. O apoio deve incluir aspectos psicológicos, sociais e econômicos, além do jurídico.
-
-TÍTULO: Formulário Nacional de Avaliação de Risco
-Ferramenta padrão utilizada para registrar dados pessoais e informações da violência sofrida. Deve ser preenchido junto com a vítima no primeiro atendimento, enviado ao CREAS e compartilhado com a rede. Evita duplicidade de atendimentos e revitimização.
-Link do modelo: https://www.tjsc.jus.br/documents/3380888/5866046/Formul%C3%A1rio+Nacional+de+Avalia%C3%A7%C3%A3o+de+Risco/f6ff4043-0647-4adc-c611-74c65ff24688
-
-TÍTULO: Atribuições do Hospital Fraiburgo (Detalhado)
-- Realizar avaliação psicossocial em casos de violência.
-- Orientar a vítima e familiares sobre seus direitos e a rede de apoio.
-- Acionar equipe interdisciplinar para atendimento integral.
-- Identificar demandas sociais e encaminhar para serviços especializados.
-- Comunicar obrigatoriamente a autoridade policial em casos confirmados.
-- Preencher e encaminhar o Formulário Nacional de Avaliação de Risco ao CREAS.
-
-TÍTULO: Atribuições do SAMU (Detalhado)
-- Atender via chamada 192, com regulação médica.
-- Recolher a paciente para ambiente seguro dentro da ambulância.
-- Encaminhar a vítima para unidade de saúde adequada.
-- Solicitar apoio da Polícia Militar caso o local seja inseguro.
-- Orientar a mulher a registrar Boletim de Ocorrência e buscar apoio social.
-
-TÍTULO: Atribuições da Vigilância Epidemiológica (Detalhado)
-- Coletar exames clínicos e vestígios em casos de violência sexual.
-- Oferecer profilaxias para ISTs, HIV e Hepatite B.
-- Acompanhar a vítima por até 6 meses devido à janela imunológica.
-- Realizar georreferenciamento e análises demográficas dos casos.
-- Implementar sistemas de notificação compulsória e treinar profissionais de saúde.
-- Garantir atendimento psicológico, médico e social integrado.
-
-TÍTULO: Atribuições da Polícia Civil – Procedimentos Legais
-- Registrar o Boletim de Ocorrência e instaurar investigação.
-- Requisitar exame de corpo de delito e perícias.
-- Encaminhar medidas protetivas de urgência ao Judiciário.
-- Ouvir vítima, agressor e testemunhas em até 48h.
-- Encaminhar a ofendida ao IML, hospital ou serviços de apoio.
-- Garantir que a vítima seja informada sobre seus direitos e serviços disponíveis.
-
-TÍTULO: Atribuições da Polícia Militar – Rede Catarina (Detalhado)
-- Realizar visitas preventivas às mulheres em risco.
-- Atuar de forma integrada com a rede de atendimento.
-- Oferecer suporte através do aplicativo PMSC Cidadão, incluindo botão de pânico.
-- Garantir comunicação imediata ao Judiciário em casos de risco iminente.
-- Romper ciclos de violência e restaurar convivência saudável.
-
-TÍTULO: Atribuições do Corpo de Bombeiros (Detalhado)
-- Prestar atendimento pré-hospitalar (APH) em casos de violência.
-- Garantir suporte físico e emocional imediato.
-- Avaliar a cena, evitando novas agressões ou riscos.
-- Acionar apoio policial em situações de perigo.
-- Separar vítima e agressor durante o atendimento.
-- Solicitar acompanhamento de familiar ou responsável em casos de crianças/adolescentes.
-- Garantir privacidade e respeito ao pudor da vítima.
-
-TÍTULO: Atribuições do Ministério Público (Detalhado)
-O Ministério Público de Santa Catarina (MPSC) tem como missão a defesa da ordem jurídica, dos direitos sociais e individuais indisponíveis e a fiscalização da lei.
-Sua atuação é essencial para garantir que os direitos das mulheres sejam respeitados e que os agressores sejam responsabilizados.
-
-Principais atribuições:
-- Acolher, de forma solidária, as mulheres em situação de violência que buscarem o serviço.
-- Promover a responsabilização dos agressores, por meio de ações penais e medidas cautelares.
-- Receber, examinar e encaminhar denúncias relacionadas à violência doméstica.
-- Fiscalizar a atuação da rede de atendimento, garantindo que cada órgão cumpra suas atribuições.
-- Requisitar medidas protetivas de urgência em conjunto com o Poder Judiciário.
-- Propor medidas de prevenção e programas de conscientização.
-- Acompanhar a aplicação da Lei Maria da Penha e demais legislações relacionadas.
-- Verificar se o Formulário Nacional de Avaliação de Risco foi preenchido e, em caso negativo, orientar seu preenchimento junto ao CREAS.
-
-TÍTULO: Atribuições do Poder Judiciário (Detalhado)
-O Poder Judiciário é responsável por aplicar a justiça nos casos de violência doméstica, com base na Lei Maria da Penha e outras legislações pertinentes.
-Seu papel é garantir proteção imediata à vítima e responsabilização ao agressor.
-
-Principais atribuições:
-- Acolher, de forma solidária, as mulheres em situação de violência que cheguem ao fórum ou que sejam encaminhadas por outros órgãos da rede.
-- Julgar casos de violência doméstica e familiar contra a mulher.
-- Deferir Medidas Protetivas de Urgência (MPU), como afastamento do agressor, proibição de contato e suspensão de porte de armas.
-- Garantir agilidade no processamento das ações, evitando a revitimização.
-- Acompanhar a execução das medidas aplicadas, fiscalizando seu cumprimento.
-- Determinar medidas adicionais de proteção, conforme a gravidade do caso.
-- Estimular práticas restaurativas que possam reduzir a reincidência da violência.
-- Garantir comunicação com outros órgãos da rede para efetivar a proteção.
-
-TÍTULO: Atribuições da OAB Por Elas (Detalhado)
-A OAB Por Elas é um projeto da Ordem dos Advogados do Brasil, voltado para oferecer assistência jurídica gratuita a mulheres em situação de violência, especialmente as de baixa renda.
-Seu trabalho é realizado por advogadas e advogados voluntários.
-
-Principais atribuições:
-- Oferecer acolhimento jurídico inicial às mulheres em situação de violência.
-- Orientar sobre os direitos previstos na legislação, como a Lei Maria da Penha.
-- Atuar na defesa e acompanhamento de processos judiciais relacionados à violência doméstica.
-- Encaminhar para outros órgãos da rede quando necessário (CREAS, Polícia Civil, Ministério Público, etc.).
-- Auxiliar no pedido de Medidas Protetivas de Urgência.
-- Promover campanhas de conscientização sobre os direitos das mulheres.
-- Contribuir para evitar a revitimização no processo judicial.
-- Verificar se já foi preenchido o Formulário Nacional de Avaliação de Risco e, em caso negativo, preencher e encaminhar ao CREAS.
-
-
-`;
+import type { KnowledgeChunk } from './types';
+
+export const KNOWLEDGE_BASE: KnowledgeChunk[] = [
+  {
+    id: 'apresentacao-rede',
+    title: 'Apresentação da Rede de Atendimento à Mulher Vítima de Violência em Fraiburgo',
+    content: 'Este é o Protocolo de Atendimento à Mulher Vítima de Violência Doméstica do Município de Fraiburgo. O objetivo é apresentar à população a rede de atendimento e os serviços disponíveis. A violência doméstica é qualquer ação que cause morte, lesão, sofrimento físico, sexual ou psicológico e dano moral ou patrimonial. O Município busca criar estratégias de enfrentamento, prevenção e atenção à violência. Este protocolo organiza os atendimentos para garantir atenção integral a todos os casos.',
+    type: 'geral',
+    tags: ['rede de atendimento', 'protocolo', 'fraiburgo', 'violência doméstica', 'apresentação']
+  },
+  {
+    id: 'publico-alvo',
+    title: 'Público-Alvo da Rede de Proteção',
+    content: 'Mulheres acima de 18 anos em situação ou risco de violência residentes em Fraiburgo.',
+    type: 'definicao',
+    tags: ['público-alvo', 'mulheres', 'violência', 'fraiburgo']
+  },
+  {
+    id: 'objetivo-rede',
+    title: 'Objetivo da Rede de Proteção',
+    content: 'Apresentar a Rede de Proteção e Atendimento à Mulher Vítima de Violência Doméstica em Fraiburgo e os procedimentos adotados pelos serviços, com a finalidade de oferecer atendimento organizado, integral e humanizado, evitando a revitimização e fortalecendo a rede de suporte.',
+    type: 'geral',
+    tags: ['objetivo', 'rede de proteção', 'atendimento', 'humanizado', 'revitimização']
+  },
+  {
+    id: 'definicao-violencia-mulher',
+    title: 'O que é Violência Contra a Mulher?',
+    content: 'A violência contra as mulheres é uma violação dos direitos humanos e um grave problema social e de saúde pública, definida pela Lei Maria da Penha (Lei n. 11.340/2006). É o uso intencional da força ou poder que resulte em lesão, morte, dano psicológico ou privação.',
+    type: 'definicao',
+    tags: ['violência contra a mulher', 'lei maria da penha', 'direitos humanos', 'definição']
+  },
+  {
+    id: 'tipo-violencia-fisica',
+    title: 'Tipos de Violência - Violência Física',
+    content: 'Violência Física é qualquer conduta que ofenda a integridade ou saúde corporal. Exemplos: empurrões, tapas, chutes, arranhões, puxar o cabelo, cuspir, sufocamento, estrangulamento, jogar objetos, uso de armas ou tortura.',
+    type: 'definicao',
+    tags: ['violência física', 'tipos de violência', 'agressão', 'lesão corporal']
+  },
+  {
+    id: 'tipo-violencia-psicologica',
+    title: 'Tipos de Violência - Violência Psicológica',
+    content: 'Violência Psicológica é qualquer conduta que cause dano emocional, diminuição da autoestima, ou que vise controlar ações, comportamentos e decisões através de ameaça, constrangimento, humilhação, manipulação, isolamento, vigilância constante, insulto, chantagem ou ridicularização. Exemplos: humilhar em público, xingamentos, ameaçar, menosprezar, proibir acesso a amigos e familiares.',
+    type: 'definicao',
+    tags: ['violência psicológica', 'tipos de violência', 'dano emocional', 'autoestima', 'ameaça', 'humilhação']
+  },
+  {
+    id: 'tipo-violencia-sexual',
+    title: 'Tipos de Violência - Violência Sexual',
+    content: 'Violência Sexual é qualquer conduta que constranja a presenciar, manter ou participar de relação sexual não desejada; que impeça o uso de método contraceptivo; ou que force ao matrimônio, gravidez, aborto ou prostituição. Exemplos: estupro, forçar sexo com outras pessoas, impedir o uso de contraceptivos, filmar momentos íntimos sem consentimento.',
+    type: 'definicao',
+    tags: ['violência sexual', 'tipos de violência', 'estupro', 'abuso', 'consentimento']
+  },
+  {
+    id: 'tipo-violencia-patrimonial',
+    title: 'Tipos de Violência - Violência Patrimonial',
+    content: 'Violência Patrimonial é qualquer conduta que configure retenção, subtração ou destruição de objetos, instrumentos de trabalho, documentos pessoais, bens e valores. Exemplos: impedir a mulher de trabalhar, controlar o dinheiro, destruir documentos, não pagar pensão alimentícia, quebrar objetos pessoais.',
+    type: 'definicao',
+    tags: ['violência patrimonial', 'tipos de violência', 'bens', 'dinheiro', 'documentos']
+  },
+  {
+    id: 'tipo-violencia-moral',
+    title: 'Tipos de Violência - Violência Moral',
+    content: 'Violência Moral é qualquer conduta que configure calúnia, difamação ou injúria. Exemplos: acusar de crimes não cometidos, publicar fotos íntimas, espalhar mentiras para prejudicar a reputação, xingar com palavras que ofendam a dignidade.',
+    type: 'definicao',
+    tags: ['violência moral', 'tipos de violência', 'calúnia', 'difamação', 'injúria', 'reputação']
+  },
+  {
+    id: 'lista-orgaos-rede',
+    title: 'Rede Protetiva de Atendimento a Mulher de Fraiburgo - Lista de Órgãos',
+    content: 'A rede inclui: Centro de Referência Especializado em Assistência Social (CREAS), Centro de Referência em Assistência Social (CRAS), Secretaria Municipal de Assistência Social, Secretaria Municipal de Educação, Conselho Municipal de Direitos da Mulher (CMDM), Procuradoria Especial da Mulher, Secretaria de Saúde, Hospital Fraiburgo, SAMU, Vigilância Epidemiológica, Polícia Civil (Sala Lilás), Polícia Militar (Rede Catarina), Corpo de Bombeiros, Ministério Público, Poder Judiciário e OAB Por Elas.',
+    type: 'servico',
+    tags: ['rede protetiva', 'órgãos', 'lista', 'creas', 'cras', 'polícia', 'saúde']
+  },
+  {
+    id: 'funcionamento-rede',
+    title: 'Como Funciona a Rede de Atendimento',
+    content: 'Todos os serviços da Rede Protetiva são uma porta de entrada para o atendimento. Eles devem acolher de forma qualificada e encaminhar os casos. A Polícia Civil é a referência para o atendimento inicial. Casos de risco iminente de vida devem ser encaminhados para serviços de saúde (hospital, pronto atendimento). Todos os casos devem ser comunicados à vigilância epidemiológica.',
+    type: 'procedimento',
+    tags: ['funcionamento', 'rede de atendimento', 'procedimento', 'acolhimento', 'polícia civil']
+  },
+  {
+    id: 'sigilo-acolhimento',
+    title: 'Sigilo e Acolhimento no Atendimento',
+    content: 'Os profissionais devem manter sigilo total sobre as informações pessoais. O atendimento deve ser feito sem julgamentos, com qualidade e respeito à autonomia da mulher. Todas as instituições devem oferecer um acolhimento solidário, informando sobre os procedimentos e possibilidades de proteção para que a mulher se sinta segura e apoiada.',
+    type: 'procedimento',
+    tags: ['sigilo', 'acolhimento', 'atendimento', 'respeito', 'autonomia']
+  },
+  {
+    id: 'atribuicoes-creas',
+    title: 'Atribuições do CREAS (Centro de Referência Especializado em Assistência Social)',
+    content: 'O CREAS oferece atendimento psicossocial, ajuda a obter benefícios como cesta básica и aluguel social, rompe com padrões de violência, e encaminha para outros serviços da rede.',
+    type: 'servico',
+    tags: ['creas', 'atribuições', 'serviços', 'psicossocial', 'benefícios']
+  },
+  {
+    id: 'atribuicoes-cras',
+    title: 'Atribuições do CRAS (Centro de Referência em Assistência Social)',
+    content: 'O CRAS previne situações de risco e fortalece vínculos familiares. Oferece acompanhamento familiar, avaliação para benefícios, inclusão no Cadastro Único e encaminhamentos para a rede.',
+    type: 'servico',
+    tags: ['cras', 'atribuições', 'serviços', 'prevenção', 'cadastro único']
+  },
+  {
+    id: 'atribuicoes-secretaria-assistencia-social',
+    title: 'Atribuições da Secretaria Municipal de Assistência Social',
+    content: 'Responsável pela gestão da política de assistência social, oferece benefícios eventuais, encaminha para assistência jurídica, e, em casos graves, para casa de acolhimento.',
+    type: 'servico',
+    tags: ['secretaria de assistência social', 'atribuições', 'benefícios', 'assistência jurídica']
+  },
+  {
+    id: 'atribuicoes-secretaria-educacao',
+    title: 'Papel da Secretaria Municipal de Educação',
+    content: 'A escola tem um papel importante na identificação da violência familiar através do comportamento dos alunos. Professores e gestores devem acolher, orientar e encaminhar os casos para a rede de proteção, como o Conselho Tutelar e o CREAS.',
+    type: 'servico',
+    tags: ['secretaria de educação', 'escola', 'identificação', 'encaminhamento']
+  },
+  {
+    id: 'atribuicoes-cmdm',
+    title: 'Atribuições do Conselho Municipal de Direitos da Mulher (CMDM)',
+    content: 'O CMDM fiscaliza e avalia as políticas públicas para mulheres. Promove a articulação entre os órgãos para o enfrentamento da violência e acompanha a qualidade do atendimento.',
+    type: 'servico',
+    tags: ['cmdm', 'conselho da mulher', 'atribuições', 'fiscalização', 'políticas públicas']
+  },
+  {
+    id: 'atribuicoes-procuradoria-mulher',
+    title: 'Atribuições da Procuradoria Especial da Mulher',
+    content: 'Atua na Câmara Municipal para defender a igualdade e combater a violência. Fiscaliza o Poder Executivo, sugere leis e encaminha denúncias aos órgãos competentes.',
+    type: 'servico',
+    tags: ['procuradoria da mulher', 'câmara municipal', 'atribuições', 'denúncias']
+  },
+  {
+    id: 'atribuicoes-secretaria-saude',
+    title: 'Papel da Secretaria de Saúde e Unidades de Saúde',
+    content: 'Profissionais de saúde devem estar atentos para identificar sinais de violência. Devem prestar atendimento, orientar, e comunicar a autoridade policial em até 24 horas. Em casos de violência sexual, encaminham para a Vigilância Epidemiológica.',
+    type: 'servico',
+    tags: ['secretaria de saúde', 'unidades de saúde', 'atendimento médico', 'notificação']
+  },
+  {
+    id: 'atribuicoes-hospital',
+    title: 'Atribuições do Hospital Fraiburgo',
+    content: 'O hospital oferece atendimento humanizado, acolhe mulheres em situação de violência, orienta sobre o registro de Boletim de Ocorrência, aciona a rede de apoio e comunica a autoridade policial.',
+    type: 'servico',
+    tags: ['hospital fraiburgo', 'atribuições', 'atendimento de saúde', 'boletim de ocorrência']
+  },
+  {
+    id: 'atribuicoes-samu',
+    title: 'Atribuições do SAMU (Serviço de Atendimento Móvel de Urgência)',
+    content: 'O SAMU, acionado pelo 192, presta atendimento de urgência, acolhe a paciente em um ambiente seguro, e a encaminha para o serviço de saúde adequado, solicitando apoio policial se necessário.',
+    type: 'servico',
+    tags: ['samu', '192', 'atribuições', 'urgência', 'emergência']
+  },
+  {
+    id: 'atribuicoes-vigilancia-epidemiologica',
+    title: 'Atribuições da Vigilância Epidemiológica',
+    content: 'Coleta e monitora dados sobre casos de violência para identificar padrões e fatores de risco. Em casos de violência sexual, realiza a profilaxia para Infecções Sexualmente Transmissíveis (ISTs).',
+    type: 'servico',
+    tags: ['vigilância epidemiológica', 'atribuições', 'dados', 'violência sexual', 'profilaxia', 'ist']
+  },
+  {
+    id: 'atribuicoes-policia-civil',
+    title: 'Atribuições da Polícia Civil – Sala Lilás',
+    content: 'A Polícia Civil investiga crimes, registra o Boletim de Ocorrência, solicita Medidas Protetivas de Urgência ao Poder Judiciário, encaminha a vítima para exames e informa sobre seus direitos.',
+    type: 'servico',
+    tags: ['polícia civil', 'sala lilás', 'atribuições', 'boletim de ocorrência', 'medida protetiva']
+  },
+  {
+    id: 'atribuicoes-policia-militar',
+    title: 'Atribuições da Polícia Militar – Rede Catarina',
+    content: 'A Rede Catarina é um programa da Polícia Militar para prevenir a violência doméstica. Realiza visitas preventivas, orienta as vítimas e oferece o aplicativo PMSC Cidadão com um "botão de pânico" para emergências.',
+    type: 'servico',
+    tags: ['polícia militar', 'rede catarina', 'atribuições', 'prevenção', 'botão de pânico', '190']
+  },
+  {
+    id: 'atribuicoes-bombeiros',
+    title: 'Atribuições do Corpo de Bombeiros',
+    content: 'Acionado pelo 193, o Corpo de Bombeiros presta atendimento de emergência, oferecendo suporte físico e emocional à vítima e acionando apoio policial quando necessário para garantir a segurança da cena.',
+    type: 'servico',
+    tags: ['corpo de bombeiros', '193', 'atribuições', 'emergência', 'socorro']
+  },
+  {
+    id: 'atribuicoes-mp',
+    title: 'Atribuições do Ministério Público',
+    content: 'O Ministério Público defende a ordem jurídica e os interesses sociais. Promove ações penais para responsabilizar os agressores, fiscaliza a rede de atendimento e pode requisitar medidas de proteção.',
+    type: 'servico',
+    tags: ['ministério público', 'mp', 'atribuições', 'denúncia', 'ação penal']
+  },
+  {
+    id: 'atribuicoes-judiciario',
+    title: 'Papel do Poder Judiciário',
+    content: 'O Poder Judiciário julga os casos de violência doméstica, aplica a Lei Maria da Penha, defere medidas protetivas de urgência e fiscaliza o cumprimento das penas, buscando garantir a justiça e a segurança das vítimas.',
+    type: 'servico',
+    tags: ['poder judiciário', 'atribuições', 'justiça', 'lei maria da penha', 'medida protetiva']
+  },
+  {
+    id: 'atribuicoes-oab',
+    title: 'Atribuições da OAB Por Elas',
+    content: 'É um projeto que oferece assistência jurídica gratuita para mulheres de baixa renda em situação de violência. Advogados voluntários orientam e atuam nos casos a partir do registro do Boletim de Ocorrência.',
+    type: 'servico',
+    tags: ['oab por elas', 'atribuições', 'assistência jurídica', 'gratuita', 'advogado']
+  },
+  {
+    id: 'emergencia-numeros',
+    title: 'EMERGÊNCIA - NÚMEROS IMPORTANTES',
+    content: 'Para emergências, ligue imediatamente:\nPolícia Militar: 190\nSAMU (Atendimento Móvel de Urgência): 192\nCorpo de Bombeiros: 193',
+    type: 'emergencia',
+    tags: ['emergência', 'números', 'telefones', '190', '192', '193', 'polícia', 'samu', 'bombeiros']
+  },
+  {
+    id: 'contato-creas',
+    title: 'CONTATO - CREAS (Centro de Referência Especializado de Assistência Social)',
+    content: 'Serviços: Atendimento psicossocial, auxílio com benefícios (cesta básica, aluguel social), encaminhamentos para a rede, cursos profissionalizantes.\nEndereço: Av. Paraná, 677, Bairro Jardim das Hortênsias, Fraiburgo - SC.\nTelefone: (49) 3246-2826\nHorário: 8h às 12h e das 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['creas', 'contato', 'endereço', 'telefone', 'horário', 'assistência social']
+  },
+  {
+    id: 'contato-cras',
+    title: 'CONTATO - CRAS (Centro de Referência de Assistência Social)',
+    content: 'Serviços: Inclusão em grupos de fortalecimento de vínculos, Cadastro Único, avaliação para benefícios, encaminhamentos para a rede.\nEndereço: Av. Pedro Antonio Gianelo, 1142-1214, Bairro São Miguel, Fraiburgo - SC.\nTelefone: (49) 3256-3069 e (49) 3256-3095\nHorário: 7h45min às 11h45min e das 13h15min às 17h15min.',
+    type: 'contato',
+    tags: ['cras', 'contato', 'endereço', 'telefone', 'horário', 'assistência social']
+  },
+  {
+    id: 'contato-secretaria-assistencia-social',
+    title: 'CONTATO - Secretaria Municipal de Assistência Social',
+    content: 'Serviços: Estudo social, Cadastro Único, fornecimento de Benefícios Eventuais (cesta básica, passagens), encaminhamento para confecção de documentos e para a rede de apoio.\nEndereço: Rua Arnoldo Frey, 179, Bairro Centro, Fraiburgo-SC.\nTelefone: (49) 3908-2025 ou (49) 3908-2035 ou (49) 99197-7530\nHorário: 8h às 12h e das 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['secretaria de assistência social', 'contato', 'endereço', 'telefone', 'horário']
+  },
+  {
+    id: 'contato-secretaria-educacao',
+    title: 'CONTATO - Secretaria Municipal de Educação (SME)',
+    content: 'Serviços: Realiza campanhas preventivas e aciona órgãos competentes em casos suspeitos ou confirmados envolvendo educandos.\nEndereço: Av. Adalberto Schmidt Burda, 100, Bairro São José, Fraiburgo - SC.\nTelefone: (49) 3256-4250\nHorário: 8h às 12h e das 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['secretaria de educação', 'sme', 'contato', 'endereço', 'telefone', 'horário']
+  },
+  {
+    id: 'contato-cmdm',
+    title: 'CONTATO - Conselho Municipal dos Direitos da Mulher (CMDM)',
+    content: 'Serviços: Articula o enfrentamento à violência, referencia para a rede de atendimento.\nEndereço: R. Arnoldo Frey, 179, Bairro Centro, Fraiburgo-SC.\nTelefone: (49) 3908-2025 e (49) 3908-2035\nHorário: 8h às 12h e das 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['cmdm', 'conselho da mulher', 'contato', 'endereço', 'telefone', 'horário']
+  },
+  {
+    id: 'contato-procuradoria-mulher',
+    title: 'CONTATO - Procuradoria Especial da Mulher na Câmara Municipal',
+    content: 'Serviços: Articulação entre órgãos, fomento ao trabalho em rede, encaminhamentos.\nEndereço: Av. Lebon Régis, 219, Bairro São José, Fraiburgo - SC.\nTelefone: (49) 3246-2764\nHorário: 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['procuradoria da mulher', 'contato', 'endereço', 'telefone', 'horário']
+  },
+  {
+    id: 'contato-secretaria-saude',
+    title: 'CONTATO - Secretaria Municipal de Saúde',
+    content: 'Serviços: Encaminhamento para vigilância epidemiológica (violência sexual), orientação para registro de B.O., apoio psicológico e social.\nEndereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.\nTelefone: (49) 3256-4000 ou (49) 3256-4029.',
+    type: 'contato',
+    tags: ['secretaria de saúde', 'contato', 'endereço', 'telefone']
+  },
+  {
+    id: 'contato-hospital',
+    title: 'CONTATO - Hospital Fraiburgo',
+    content: 'Serviços: Atendimento de saúde, avaliação psicossocial, orientação para registro de B.O., comunicação à autoridade policial.\nEndereço: Av. João Marques Vieira, 979, Bairro Centro, Fraiburgo – SC.\nTelefone: (49) 3246-1012.',
+    type: 'contato',
+    tags: ['hospital fraiburgo', 'contato', 'endereço', 'telefone']
+  },
+  {
+    id: 'contato-samu',
+    title: 'CONTATO - SAMU (Serviço Móvel de Urgência)',
+    content: 'Serviços: Socorro em emergências.\nEndereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.\nTelefone: 192.',
+    type: 'contato',
+    tags: ['samu', 'contato', 'endereço', 'telefone', 'emergência', '192']
+  },
+  {
+    id: 'contato-vigilancia-epidemiologica',
+    title: 'CONTATO - Vigilância Epidemiológica',
+    content: 'Serviços: Atendimento e profilaxia para vítimas de violência sexual.\nEndereço: R. Vito Pizzeta, 77, Bairro Salete, Fraiburgo - SC.\nTelefone: (49) 3256-4043\nHorário: 8h às 12h e das 13h30min às 17h30min.',
+    type: 'contato',
+    tags: ['vigilância epidemiológica', 'contato', 'endereço', 'telefone', 'horário', 'violência sexual']
+  },
+  {
+    id: 'contato-policia-civil',
+    title: 'CONTATO - Polícia Civil (Delegacia de Polícia/Sala Lilás)',
+    content: 'Serviços: Confecção de Boletim de Ocorrência, pedido de medida protetiva, encaminhamento para IML, investigação.\nEndereço: Av. Caçador, 593, Bairro São José, Fraiburgo - SC.\nTelefone: (49) 3533-5456\nHorário: 12h às 19h.',
+    type: 'contato',
+    tags: ['polícia civil', 'delegacia', 'sala lilás', 'contato', 'endereço', 'telefone', 'horário', 'boletim de ocorrência']
+  },
+  {
+    id: 'contato-policia-militar',
+    title: 'CONTATO - Polícia Militar / Rede Catarina',
+    content: 'Serviços: Atendimento policial, visitas preventivas (Rede Catarina), orientação sobre o "botão do pânico".\nEndereço: R. das Azaléias, 1.145, Bairro Jardim das Hortênsias, Fraiburgo - SC.\nTelefone de Emergência: 190.\nOutro Telefone: (49) 3554-8904\nHorário: 24 horas.',
+    type: 'contato',
+    tags: ['polícia militar', 'rede catarina', 'contato', 'endereço', 'telefone', 'horário', 'emergência', '190']
+  },
+  {
+    id: 'contato-bombeiros',
+    title: 'CONTATO - Corpo de Bombeiros',
+    content: 'Serviços: Socorro em emergências.\nEndereço: Av. Caçador, 582, Bairro São José, Fraiburgo - SC.\nTelefone: 193.',
+    type: 'contato',
+    tags: ['corpo de bombeiros', 'contato', 'endereço', 'telefone', 'emergência', '193']
+  },
+  {
+    id: 'contato-mp',
+    title: 'CONTATO - Ministério Público de Santa Catarina',
+    content: 'Serviços: Acolhimento de denúncias, requisição de inquérito, medidas de prevenção.\nEndereço: Anexo Fórum de Fraiburgo, Av. Curitibanos, 375, Bairro Centro, Fraiburgo - SC.\nTelefone: (49) 99188-2795\nHorário: 12h às 19h.',
+    type: 'contato',
+    tags: ['ministério público', 'mpsc', 'contato', 'endereço', 'telefone', 'horário', 'denúncia']
+  },
+  {
+    id: 'contato-judiciario',
+    title: 'CONTATO - Poder Judiciário de Santa Catarina – Comarca de Fraiburgo',
+    content: 'Serviços: Julgamento de processos, deferimento de medidas protetivas.\nEndereço: Av. Curitibanos, 375, Centro, Fraiburgo - SC.\nTelefone: (49) 3521-8216\nHorário: 12h às 19h.',
+    type: 'contato',
+    tags: ['poder judiciário', 'fórum', 'contato', 'endereço', 'telefone', 'horário']
+  },
+  {
+    id: 'contato-oab',
+    title: 'CONTATO - OAB Por Elas',
+    content: 'Serviços: Orientação e assistência jurídica gratuita para mulheres de baixa renda.\nEndereço: Sede OAB, Rua Antonio Porto Burda, s/n, Bairro Centro, Fraiburgo - SC.\nTelefone: (49) 3246-2090\nHorário: 13h às 19h.',
+    type: 'contato',
+    tags: ['oab por elas', 'contato', 'endereço', 'telefone', 'horário', 'advogado', 'jurídico']
+  },
+];
