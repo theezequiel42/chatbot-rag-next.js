@@ -4,6 +4,7 @@ import { ChatMessage, Sender } from '../types';
 import { createChatSession, streamMessageToBot } from '../services/geminiService';
 import { initializeRag } from '../services/ragService';
 import MessageBubble from './MessageBubble';
+import VoiceInterface from './VoiceInterface';
 
 const QUICK_REPLIES = [
   'O que é violência doméstica?',
@@ -20,6 +21,7 @@ const ChatInterface: React.FC = () => {
   const [initError, setInitError] = useState<string | null>(null);
   const [chat, setChat] = useState<Chat | null>(null);
   const [showQuickReplies, setShowQuickReplies] = useState(false);
+  const [mode, setMode] = useState<'text' | 'voice'>('text');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -141,6 +143,10 @@ const ChatInterface: React.FC = () => {
       e.preventDefault();
       handleSendMessage(input);
   }
+  
+  if (mode === 'voice') {
+      return <VoiceInterface onExit={() => setMode('text')} chat={chat} />;
+  }
 
   if (isInitializing || initError) {
     return (
@@ -204,6 +210,18 @@ const ChatInterface: React.FC = () => {
             className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow disabled:bg-gray-100"
             autoComplete="off"
           />
+           <button
+            type="button"
+            onClick={() => setMode('voice')}
+            disabled={isLoading}
+            className="text-gray-500 font-semibold w-12 h-12 rounded-full hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
+            aria-label="Ativar bate-papo por voz"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm-1 4a1 1 0 00-1 1v2a1 1 0 102 0v-2a1 1 0 00-1-1zm10-1a1 1 0 100 2v-2a1 1 0 100-2zM9 4a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
+              <path d="M3 10a5 5 0 015-5h4a5 5 0 015 5v2a5 5 0 01-5 5H8a5 5 0 01-5-5v-2zM8 9a3 3 0 00-3 3v2a3 3 0 003 3h4a3 3 0 003-3v-2a3 3 0 00-3-3H8z" />
+            </svg>
+          </button>
           <button
             type="submit"
             disabled={isLoading || !input.trim() || showQuickReplies}

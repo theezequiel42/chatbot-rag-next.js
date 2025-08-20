@@ -11,6 +11,8 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 ## ✨ Funcionalidades
 
 - 💬 Interface de chat intuitiva e responsiva
+- 🎙️ **Modo de Voz em Tempo Real:** Converse naturalmente usando sua voz.
+- 🎧 **Visualização de Áudio 3D Interativa:** Uma esfera dinâmica que reage à sua voz e às respostas do bot, criada com Three.js e a Web Audio API.
 - 🧠 IA conversacional com Google Gemini
 - 🔍 Busca Híbrida (Semântica + Palavra-chave) com RRF para máxima precisão
 - 🚀 RAG 100% client-side com TensorFlow.js para maior privacidade
@@ -25,6 +27,7 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 - **Google Gemini AI** - Modelo de linguagem generativo
 - **TensorFlow.js** - Machine learning no navegador
 - **Universal Sentence Encoder** - Modelo para geração de embeddings de texto
+- **Three.js** - Biblioteca para renderização 3D/WebGL
 - **Tailwind CSS** - Estilização
 
 ## 🧠 RAG com Busca Híbrida (Client-Side)
@@ -82,7 +85,11 @@ O Anjo Amigo utiliza um sistema RAG avançado que roda inteiramente no navegador
 ```
 ├── components/
 │   ├── ChatInterface.tsx    # Interface principal do chat
-│   └── MessageBubble.tsx    # Componente de mensagens
+│   ├── MessageBubble.tsx    # Componente de mensagens
+│   ├── VoiceInterface.tsx   # Interface do modo de voz
+│   └── AudioVisualizer.tsx  # Componente da esfera 3D
+├── hooks/
+│   └── useVoiceProcessor.ts # Hook para processamento de áudio e voz
 ├── services/
 │   ├── embeddingService.ts  # Lógica para gerar embeddings com TensorFlow.js
 │   ├── geminiService.ts     # Integração com Google Gemini
