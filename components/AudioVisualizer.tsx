@@ -4,6 +4,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { VoiceState } from './VoiceInterface';
 
 const vertexShader = `
+  precision mediump float;
+
   uniform float u_time;
   uniform float u_frequency;
   
@@ -76,6 +78,8 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+  precision mediump float;
+
   uniform float u_time;
   uniform float u_state_float; // 0:idle, 1:listening, 2:thinking, 3:speaking
 
@@ -98,16 +102,16 @@ const fragmentShader = `
     vec3 view_direction = normalize(-v_position);
     vec3 normal_direction = normalize(v_position);
     float fresnel = 1.0 - dot(view_direction, normal_direction);
-    fresnel = pow(fresnel, 2.0);
+    fresnel = fresnel * fresnel; // Using multiply instead of pow for compatibility and performance
 
-    // Pulse effect for thinking and speaking
-    float pulse = 0.0;
-    if (u_state_float > 1.5 && u_state_float < 2.5) { // Thinking
-        pulse = (sin(u_time * 3.0) * 0.5 + 0.5) * 0.2;
-    }
-    if (u_state_float > 2.5) { // Speaking
-        pulse = (sin(u_time * 2.0) * 0.5 + 0.5) * 0.3;
-    }
+    // Pulse effect for thinking and speaking (branchless)
+    float thinking_pulse = (sin(u_time * 3.0) * 0.5 + 0.5) * 0.2;
+    float is_thinking = step(1.5, u_state_float) * (1.0 - step(2.5, u_state_float));
+
+    float speaking_pulse = (sin(u_time * 2.0) * 0.5 + 0.5) * 0.3;
+    float is_speaking = step(2.5, u_state_float);
+
+    float pulse = thinking_pulse * is_thinking + speaking_pulse * is_speaking;
 
     vec3 base_color = final_color + v_noise * 0.1 + pulse;
     vec3 glow_color = final_color * 1.5;

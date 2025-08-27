@@ -81,7 +81,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onExit, chat }) => {
     switch (voiceState) {
       case 'listening': return 'Ouvindo... Toque para parar.';
       case 'thinking': return 'Processando...';
-      case 'speaking': return 'Anjo Amigo está respondendo...';
+      case 'speaking': return 'Rosa Amiga está respondendo...';
       case 'error': return 'Ocorreu um erro. Toque para tentar novamente.';
       case 'idle':
       default:

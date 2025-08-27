@@ -56,6 +56,7 @@ export const useVoiceProcessor = () => {
   const [transcript, setTranscript] = useState('');
   const [finalTranscript, setFinalTranscript] = useState('');
   const [frequencyData, setFrequencyData] = useState(new Uint8Array(0));
+  const [preferredVoice, setPreferredVoice] = useState<SpeechSynthesisVoice | null>(null);
   
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -64,6 +65,33 @@ export const useVoiceProcessor = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const getAndSetVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      if (!voices.length) {
+        return;
+      }
+
+      const ptBrVoices = voices.filter(voice => voice.lang === 'pt-BR');
+      if (!ptBrVoices.length) return;
+
+      // Prioritize voices that are explicitly female or have common Brazilian female names
+      const femaleVoice = ptBrVoices.find(voice =>
+        /female|feminino|mulher|maria|ana|camila|luciana|helena|isabela|manuela|clara|sofia|laura/i.test(voice.name)
+      );
+      
+      setPreferredVoice(femaleVoice || ptBrVoices[0]); // Fallback to the first pt-BR voice
+    };
+
+    getAndSetVoice(); // Initial attempt in case voices are already loaded
+    speechSynthesis.addEventListener('voiceschanged', getAndSetVoice);
+
+    return () => {
+      speechSynthesis.removeEventListener('voiceschanged', getAndSetVoice);
+    };
+  }, []);
+
 
   const cleanup = useCallback(() => {
     if (animationFrameRef.current) {
@@ -182,6 +210,11 @@ export const useVoiceProcessor = () => {
     utterance.lang = 'pt-BR';
     utterance.rate = 1.1;
     utterance.pitch = 1.0;
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
     utterance.onend = onEnd;
     utterance.onerror = (e) => {
         console.error("SpeechSynthesis Error", e);
@@ -189,7 +222,7 @@ export const useVoiceProcessor = () => {
     }
     speechSynthesis.speak(utterance);
     return utterance;
-  }, []);
+  }, [preferredVoice]);
 
   return { isListening, transcript, frequencyData, startListening, stopListening, speak, setTranscript };
 };

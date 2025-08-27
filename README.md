@@ -1,4 +1,4 @@
-# Anjo Amigo 🤖💜
+# Rosa Amiga 🤖💜
 
 **Apoio e conscientização contra a violência doméstica**
 
@@ -6,7 +6,7 @@ Um chatbot inteligente desenvolvido em React que oferece suporte, informações 
 
 ## 🎯 Sobre o Projeto
 
-Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google Gemini) para fornecer um espaço seguro de conversa, orientação e conscientização sobre violência doméstica. O sistema implementa uma forma avançada de RAG (Retrieval-Augmented Generation) para oferecer respostas precisas e contextualizadas, rodando inteiramente no navegador do usuário para máxima privacidade.
+Rosa Amiga é uma aplicação web que utiliza inteligência artificial (Google Gemini) para fornecer um espaço seguro de conversa, orientação e conscientização sobre violência doméstica. O sistema implementa uma forma avançada de RAG (Retrieval-Augmented Generation) para oferecer respostas precisas e contextualizadas, rodando inteiramente no navegador do usuário para máxima privacidade.
 
 ## ✨ Funcionalidades
 
@@ -31,7 +31,7 @@ Anjo Amigo é uma aplicação web que utiliza inteligência artificial (Google G
 - **Tailwind CSS** - Estilização
 
 ## 🧠 RAG com Busca Híbrida (Client-Side)
-O Anjo Amigo utiliza um sistema RAG avançado que roda inteiramente no navegador do usuário para garantir privacidade e precisão. A abordagem combina duas técnicas de busca para obter resultados superiores:
+A Rosa Amiga utiliza um sistema RAG avançado que roda inteiramente no navegador do usuário para garantir privacidade e precisão. A abordagem combina duas técnicas de busca para obter resultados superiores:
 
 1.  **Busca Semântica**: Usamos o **Universal Sentence Encoder** (via TensorFlow.js) para converter tanto a base de conhecimento quanto as perguntas do usuário em vetores numéricos (embeddings). Isso permite que o sistema entenda a *intenção* e o *significado* da pergunta, encontrando trechos conceitualmente relevantes.
 
@@ -51,8 +51,8 @@ O Anjo Amigo utiliza um sistema RAG avançado que roda inteiramente no navegador
 
 1. **Clone o repositório**
    ```bash
-   git clone <https://github.com/theezequiel42/chatbot-rag-next.js>
-   cd chatbot-rag-next.js
+   git clone <url-do-repositorio>
+   cd rosa-amiga
    ```
 
 2. **Instale as dependências**
