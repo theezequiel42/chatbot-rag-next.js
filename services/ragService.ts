@@ -47,30 +47,36 @@ export const initializeRag = async (): Promise<void> => {
 
 // --- Keyword Search Implementation ---
 
-const normalizeText = (text: string): string[] => {
+// Normaliza texto: minúsculas, remove acentos, pontuação e múltiplos espaços
+const normalizeText = (text: string): string => {
   return text
     .toLowerCase()
-    .normalize("NFD") // Decompose accented characters
-    .replace(/[\u0300-\u036f]/g, "") // Remove accent marks
-    .replace(/[^\w\s]/g, '') // Remove punctuation
-    .split(/\s+/) // Split by whitespace
-    .filter(Boolean); // Remove empty strings
+    .normalize('NFD') // Decompose accented characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove accent marks
+    .replace(/[^\w\s]|_/g, ' ') // Remove punctuation, keep spaces
+    .replace(/\s+/g, ' ') // Collapse multiple spaces
+    .trim();
 };
 
+const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const keywordSearch = (query: string, knowledgeBase: KnowledgeChunk[]): ScoredChunk[] => {
-  const queryTokens = normalizeText(query);
+  const inputNorm = normalizeText(query);
+  const queryTokens = inputNorm.split(/\s+/).filter(Boolean);
   const scores: { [id: string]: number } = {};
 
   for (const chunk of knowledgeBase) {
     scores[chunk.id] = 0;
-    const titleTokens = normalizeText(chunk.title);
-    const contentTokens = normalizeText(chunk.content);
-    const tagTokens = normalizeText(chunk.tags.join(' '));
+    const titleNorm = normalizeText(chunk.title);
+    const contentNorm = normalizeText(chunk.content);
+    const tagNorm = normalizeText(chunk.tags.join(' '));
 
     for (const token of queryTokens) {
-      if (titleTokens.includes(token)) scores[chunk.id] += 3; // Higher weight for title
-      if (contentTokens.includes(token)) scores[chunk.id] += 1;
-      if (tagTokens.includes(token)) scores[chunk.id] += 2; // Medium weight for tags
+      if (!token) continue;
+      const wordRe = new RegExp(`\\b${escapeRegExp(token)}\\b`, 'i');
+      if (wordRe.test(titleNorm)) scores[chunk.id] += 3; // Higher weight for title
+      if (wordRe.test(contentNorm)) scores[chunk.id] += 1;
+      if (wordRe.test(tagNorm)) scores[chunk.id] += 2; // Medium weight for tags
     }
   }
 
