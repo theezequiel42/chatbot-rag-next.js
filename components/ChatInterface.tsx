@@ -14,6 +14,31 @@ const QUICK_REPLIES = [
   'Quero apenas conversar.'
 ];
 
+// Sticker mapping: one for each type of violência
+const STICKERS: Record<string, string> = {
+  fisica: '/stickers/fisica.png',
+  psicologica: '/stickers/psicologica.png',
+  sexual: '/stickers/sexual.png',
+  patrimonial: '/stickers/patrimonial.png',
+  moral: '/stickers/moral.png',
+};
+
+// Regex para identificar tipos de violência nas mensagens
+const STICKER_PATTERNS: { key: keyof typeof STICKERS; regex: RegExp }[] = [
+  { key: 'fisica', regex: /(viol[eê]ncia\s*f[ií]sica|agress[aã]o\s*f[ií]sica)/i },
+  { key: 'psicologica', regex: /(viol[eê]ncia\s*psicol[oó]gica)/i },
+  { key: 'sexual', regex: /(viol[eê]ncia\s*sexual|abuso\s*sexual|estupro)/i },
+  { key: 'patrimonial', regex: /(viol[eê]ncia\s*patrimonial)/i },
+  { key: 'moral', regex: /(viol[eê]ncia\s*moral|inj[uú]ria|difama[cç][aã]o|cal[uú]nia)/i },
+];
+
+const detectStickerKey = (text: string): keyof typeof STICKERS | null => {
+  for (const { key, regex } of STICKER_PATTERNS) {
+    if (regex.test(text)) return key;
+  }
+  return null;
+};
+
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -24,6 +49,7 @@ const ChatInterface: React.FC = () => {
   const [showQuickReplies, setShowQuickReplies] = useState(false);
   const [mode, setMode] = useState<'text' | 'voice'>('text');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const welcomeTimeoutsRef = useRef<number[]>([]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -47,7 +73,7 @@ const ChatInterface: React.FC = () => {
     let cumulativeDelay = 0;
     welcomeTexts.forEach((text, index) => {
       cumulativeDelay += 600;
-      setTimeout(() => {
+      const id = window.setTimeout(() => {
         const welcomeMessage: ChatMessage = {
           id: `bot-welcome-${Date.now()}-${index}`,
           text,
@@ -55,19 +81,22 @@ const ChatInterface: React.FC = () => {
         };
         setMessages((prev) => [...prev, welcomeMessage]);
       }, cumulativeDelay);
+      welcomeTimeoutsRef.current.push(id);
     });
     
-    setTimeout(() => {
+    const qrId = window.setTimeout(() => {
       setShowQuickReplies(true);
     }, cumulativeDelay + 500);
+    welcomeTimeoutsRef.current.push(qrId);
 
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
     const init = async () => {
       try {
         await initializeRag();
-        initializeChat();
+        if (!cancelled) initializeChat();
       } catch (error) {
         console.error("Initialization failed:", error);
         setInitError('Não foi possível iniciar o assistente. Verifique sua conexão e tente recarregar a página.');
@@ -76,6 +105,12 @@ const ChatInterface: React.FC = () => {
       }
     };
     init();
+    return () => {
+      cancelled = true;
+      // Clear any scheduled welcome message timeouts to avoid duplicates (React StrictMode)
+      welcomeTimeoutsRef.current.forEach((id) => clearTimeout(id));
+      welcomeTimeoutsRef.current = [];
+    };
   }, [initializeChat]);
   
   const handleSendMessage = async (messageText: string) => {
@@ -93,11 +128,17 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Detecta intenção de sticker na pergunta do usuário
+      const hintedStickerFromUser = detectStickerKey(messageText);
+      let stickerInjected = false;
+
       const stream = await streamMessageToBot(chat, messageText);
       let responseBuffer = '';
       
       for await (const chunk of stream) {
-        responseBuffer += chunk.text;
+        const delta = (chunk && typeof (chunk as any).text === 'string') ? (chunk as any).text : '';
+        if (!delta) continue;
+        responseBuffer += delta;
         const potentialMessages = responseBuffer.split('|||');
 
         if (potentialMessages.length > 1) {
@@ -106,12 +147,46 @@ const ChatInterface: React.FC = () => {
 
           completeMessages.forEach((text) => {
             if (text.trim()) {
-              const botMessage: ChatMessage = {
-                id: `bot-${Date.now()}-${Math.random()}`, // Use random to help ensure unique key
-                text: text.trim(),
-                sender: Sender.Bot,
-              };
-              setMessages((prev) => [...prev, botMessage]);
+              const trimmed = text.trim();
+              const match = trimmed.match(/^\[\[img:([a-zA-Z0-9_-]+)\]\]$/);
+              if (match) {
+                const key = match[1].toLowerCase();
+                const url = STICKERS[key];
+                if (url) {
+                  const botMessage: ChatMessage = {
+                    id: `bot-${Date.now()}-${Math.random()}`,
+                    text: '',
+                    imageUrl: url,
+                    sender: Sender.Bot,
+                  };
+                  setMessages((prev) => [...prev, botMessage]);
+                  stickerInjected = true;
+                  return;
+                }
+              }
+              const inferredKey = detectStickerKey(trimmed) || hintedStickerFromUser;
+              if (!stickerInjected && inferredKey && STICKERS[inferredKey]) {
+                const textMsg: ChatMessage = {
+                  id: `bot-${Date.now()}-${Math.random()}`,
+                  text: trimmed,
+                  sender: Sender.Bot,
+                };
+                const imgMsg: ChatMessage = {
+                  id: `bot-${Date.now()}-${Math.random()}`,
+                  text: '',
+                  imageUrl: STICKERS[inferredKey],
+                  sender: Sender.Bot,
+                };
+                setMessages((prev) => [...prev, textMsg, imgMsg]);
+                stickerInjected = true;
+              } else {
+                const botMessage: ChatMessage = {
+                  id: `bot-${Date.now()}-${Math.random()}`,
+                  text: trimmed,
+                  sender: Sender.Bot,
+                };
+                setMessages((prev) => [...prev, botMessage]);
+              }
             }
           });
         }
@@ -119,12 +194,52 @@ const ChatInterface: React.FC = () => {
 
       // After the stream is done, process any remaining text in the buffer
       if (responseBuffer.trim()) {
-        const botMessage: ChatMessage = {
-          id: `bot-${Date.now()}-${Math.random()}`,
-          text: responseBuffer.trim(),
-          sender: Sender.Bot,
-        };
-        setMessages((prev) => [...prev, botMessage]);
+        const trimmed = responseBuffer.trim();
+        const match = trimmed.match(/^\[\[img:([a-zA-Z0-9_-]+)\]\]$/);
+        if (match) {
+          const key = match[1].toLowerCase();
+          const url = STICKERS[key];
+          if (url) {
+            const botMessage: ChatMessage = {
+              id: `bot-${Date.now()}-${Math.random()}`,
+              text: '',
+              imageUrl: url,
+              sender: Sender.Bot,
+            };
+            setMessages((prev) => [...prev, botMessage]);
+            stickerInjected = true;
+          } else {
+            const botMessage: ChatMessage = {
+              id: `bot-${Date.now()}-${Math.random()}`,
+              text: trimmed,
+              sender: Sender.Bot,
+            };
+            setMessages((prev) => [...prev, botMessage]);
+          }
+        } else {
+          const inferredKey = detectStickerKey(trimmed) || hintedStickerFromUser;
+          if (!stickerInjected && inferredKey && STICKERS[inferredKey]) {
+            const textMsg: ChatMessage = {
+              id: `bot-${Date.now()}-${Math.random()}`,
+              text: trimmed,
+              sender: Sender.Bot,
+            };
+            const imgMsg: ChatMessage = {
+              id: `bot-${Date.now()}-${Math.random()}`,
+              text: '',
+              imageUrl: STICKERS[inferredKey],
+              sender: Sender.Bot,
+            };
+            setMessages((prev) => [...prev, textMsg, imgMsg]);
+          } else {
+            const botMessage: ChatMessage = {
+              id: `bot-${Date.now()}-${Math.random()}`,
+              text: trimmed,
+              sender: Sender.Bot,
+            };
+            setMessages((prev) => [...prev, botMessage]);
+          }
+        }
       }
 
     } catch (error) {

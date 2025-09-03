@@ -57,6 +57,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = fals
             <div className="w-2 h-2 bg-white rounded-full animate-pulse [animation-delay:-0.15s]"></div>
             <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
           </div>
+        ) : message.imageUrl ? (
+          <div className="flex flex-col items-center">
+            <img src={message.imageUrl} alt="" className="rounded-xl max-w-full h-auto" />
+            {message.text ? (
+              <div className="mt-2 w-full text-sm leading-relaxed">
+                {renderText(message.text)}
+              </div>
+            ) : null}
+          </div>
         ) : (
           renderText(message.text)
         )}

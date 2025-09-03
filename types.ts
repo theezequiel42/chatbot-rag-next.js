@@ -8,6 +8,7 @@ export interface ChatMessage {
   id: string;
   text: string;
   sender: Sender;
+  imageUrl?: string;
 }
 
 export interface KnowledgeChunk {
