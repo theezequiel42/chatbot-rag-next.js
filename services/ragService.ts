@@ -18,6 +18,35 @@ interface ScoredChunk {
 let vectorizedKnowledgeBase: VectorizedChunk[] = [];
 let isInitialized = false;
 
+// Contact entity index (normalized phrase extracted from contact titles)
+let contactEntityPhrases: { id: string; phrase: string }[] = [];
+
+// Fallback clean phrases for contact entries (bypass mojibake in titles)
+const CONTACT_ID_TO_PHRASE: Record<string, string> = {
+  'contato-creas': 'creas centro de referencia especializado de assistencia social',
+  'contato-cras': 'cras centro de referencia de assistencia social',
+  'contato-secretaria-assistencia-social': 'secretaria municipal de assistencia social',
+  'contato-secretaria-educacao': 'secretaria municipal de educacao sme',
+  'contato-cmdm': 'conselho municipal dos direitos da mulher cmdm',
+  'contato-procuradoria-mulher': 'procuradoria especial da mulher camara municipal',
+  'contato-secretaria-saude': 'secretaria municipal de saude',
+  'contato-hospital': 'hospital fraiburgo',
+  'contato-samu': 'samu servico movel de urgencia',
+  'contato-vigilancia-epidemiologica': 'vigilancia epidemiologica',
+  'contato-policia-civil': 'policia civil delegacia sala lilas',
+  'contato-policia-militar': 'policia militar rede catarina',
+  'contato-bombeiros': 'corpo de bombeiros',
+  'contato-mp': 'ministerio publico de santa catarina',
+  'contato-judiciario': 'poder judiciario de santa catarina comarca de fraiburgo',
+  'contato-oab': 'oab por elas',
+};
+
+// Intent tokens indicating the user likely wants contact information
+const CONTACT_INTENT_TOKENS = [
+  'contato', 'contatos', 'telefone', 'telefones', 'endereco', 'enderecos', 'endereço', 'endereços',
+  'horario', 'horarios', 'horário', 'horários', 'funcionamento', 'end', 'falar', 'numero', 'número'
+];
+
 /**
  * Initializes the RAG service by loading the embedding model,
  * and creating vector embeddings for each chunk in the knowledge base.
@@ -41,6 +70,19 @@ export const initializeRag = async (): Promise<void> => {
     embedding: embeddings[i],
   }));
 
+  // Build contact entity phrases from titles for boosting during retrieval
+  contactEntityPhrases = KNOWLEDGE_BASE
+    .filter(c => c.type === 'contato')
+    .map(c => {
+      let phrase = extractEntityPhrase(c.title);
+      const needsFallback = /�/.test(c.title) || !phrase || /�/.test(phrase);
+      if (needsFallback && CONTACT_ID_TO_PHRASE[c.id]) {
+        phrase = CONTACT_ID_TO_PHRASE[c.id];
+      }
+      return { id: c.id, phrase };
+    })
+    .filter(e => !!e.phrase);
+
   isInitialized = true;
   console.log('RAG service initialized successfully.');
 };
@@ -58,25 +100,68 @@ const normalizeText = (text: string): string => {
     .trim();
 };
 
+// Extracts a normalized entity phrase from a contact title, e.g.,
+// "CONTATO - Hospital Fraiburgo" => "hospital fraiburgo"
+const extractEntityPhrase = (title: string): string => {
+  const norm = normalizeText(title);
+  // Remove leading words like 'contato', dashes and content in parentheses
+  let phrase = norm.replace(/^contato\s*-\s*/i, '');
+  phrase = phrase.replace(/\([^)]*\)/g, ' ');
+  phrase = phrase.replace(/\s+\/\s+/g, ' ');
+  phrase = phrase.replace(/\s{2,}/g, ' ').trim();
+  return phrase;
+};
+
+// Expand tokens with simple singular/plural variants
+const expandTokens = (tokens: string[]): string[] => {
+  const out = new Set<string>();
+  for (const t of tokens) {
+    out.add(t);
+    if (t.endsWith('s')) out.add(t.slice(0, -1));
+    else out.add(t + 's');
+  }
+  return Array.from(out);
+};
+
+// Checks whether the query indicates contact intent
+const hasContactIntent = (queryNorm: string): boolean => {
+  const tokens = queryNorm.split(/\s+/);
+  return tokens.some(t => CONTACT_INTENT_TOKENS.includes(t));
+};
+
 const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const keywordSearch = (query: string, knowledgeBase: KnowledgeChunk[]): ScoredChunk[] => {
   const inputNorm = normalizeText(query);
-  const queryTokens = inputNorm.split(/\s+/).filter(Boolean);
+  const queryTokens = expandTokens(inputNorm.split(/\s+/).filter(Boolean));
   const scores: { [id: string]: number } = {};
 
   for (const chunk of knowledgeBase) {
     scores[chunk.id] = 0;
     const titleNorm = normalizeText(chunk.title);
+    const titleAug = `${titleNorm} ${CONTACT_ID_TO_PHRASE[chunk.id] || ''}`.trim();
     const contentNorm = normalizeText(chunk.content);
     const tagNorm = normalizeText(chunk.tags.join(' '));
 
     for (const token of queryTokens) {
       if (!token) continue;
       const wordRe = new RegExp(`\\b${escapeRegExp(token)}\\b`, 'i');
-      if (wordRe.test(titleNorm)) scores[chunk.id] += 3; // Higher weight for title
-      if (wordRe.test(contentNorm)) scores[chunk.id] += 1;
-      if (wordRe.test(tagNorm)) scores[chunk.id] += 2; // Medium weight for tags
+      // Exact word matches
+      if (wordRe.test(titleAug)) scores[chunk.id] += 4; // Higher weight for title
+      if (wordRe.test(tagNorm)) scores[chunk.id] += 3; // Medium weight for tags
+      if (wordRe.test(contentNorm)) scores[chunk.id] += 2;
+      // Partial fallback matches for longer tokens
+      if (token.length >= 5) {
+        if (titleAug.includes(token)) scores[chunk.id] += 2;
+        if (tagNorm.includes(token)) scores[chunk.id] += 1.5;
+        if (contentNorm.includes(token)) scores[chunk.id] += 1;
+      }
+    }
+
+    // Boost for entity phrase presence in query (for contact items)
+    const entity = contactEntityPhrases.find(e => e.id === chunk.id)?.phrase;
+    if (entity && inputNorm.includes(entity)) {
+      scores[chunk.id] += 10;
     }
   }
 
@@ -134,12 +219,24 @@ export const retrieveContext = async (query: string, topK: number = 5): Promise<
   const keywordResults: ScoredChunk[] = keywordSearch(query, KNOWLEDGE_BASE);
 
   // 3. Fuse results using RRF
-  const fusedResults = reciprocalRankFusion([semanticResults, keywordResults]);
+  let fusedResults = reciprocalRankFusion([semanticResults, keywordResults]);
+  
+  // 3.1 Apply intent-aware boosting for contact queries
+  const queryNorm = normalizeText(query);
+  if (hasContactIntent(queryNorm)) {
+    fusedResults = fusedResults.map(r => {
+      let boost = 0;
+      if (r.chunk.type === 'contato') boost += 0.3;
+      const entity = contactEntityPhrases.find(e => e.id === r.chunk.id)?.phrase;
+      if (entity && queryNorm.includes(entity)) boost += 0.7;
+      return { chunk: r.chunk, score: r.score + boost };
+    }).sort((a, b) => b.score - a.score);
+  }
   
   // 4. Get the top K most relevant chunks
   // We apply a baseline semantic relevance threshold to the final fused results
   // to prevent purely keyword-based matches that are semantically unrelated.
-  const relevanceThreshold = 0.25;
+  const relevanceThreshold = 0.22;
   const relevantChunks = fusedResults
     .filter(fusedResult => {
         const originalSemanticScore = semanticResults.find(sr => sr.chunk.id === fusedResult.chunk.id)?.score ?? 0;
