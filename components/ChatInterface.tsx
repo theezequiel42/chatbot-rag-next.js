@@ -202,7 +202,7 @@ const ChatInterface: React.FC = () => {
     return (
       <div className="flex flex-col flex-grow h-0 items-center justify-center text-center p-4">
         <div className="w-12 h-12 mb-4 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center animate-pulse">
-            <RiFlowerFill className="h-6 w-6 text-white" />
+            <RiFlowerFill size={24} color="white" />
         </div>
         <p className="font-semibold text-lg text-gray-700">
           {initError ? 'Ocorreu um Erro' : 'Preparando assistente...'}
