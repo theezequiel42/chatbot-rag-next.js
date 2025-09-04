@@ -60,6 +60,10 @@ A Rosa Amiga utiliza um sistema RAG avançado que roda inteiramente no navegador
    npm install
    ```
 
+   ```bash
+   npm install react-icons three
+   ```
+
 3. **Configure as variáveis de ambiente**
    Crie um arquivo `.env` na raiz do projeto e adicione sua chave da API do Google Gemini:
    ```
