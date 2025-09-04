@@ -1,9 +1,6 @@
 // services/embeddingService.ts
-
-// The `use` and `tf` objects are loaded from script tags in index.html.
-// We declare them here to inform TypeScript about their existence.
-declare const use: any;
-declare const tf: any;
+import * as tf from '@tensorflow/tfjs';
+import * as use from '@tensorflow-models/universal-sentence-encoder';
 
 let model: any = null;
 
