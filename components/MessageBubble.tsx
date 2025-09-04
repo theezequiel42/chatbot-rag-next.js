@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ChatMessage, Sender } from '../types';
-import { RiFlowerFill } from 'react-icons/ri';
+import {
+  RiFlowerFill,
+  RiHandHeartLine,
+  // Fix: The icon RiQuotationRightLine does not exist in react-icons/ri. Replaced with RiDoubleQuotesR.
+  RiDoubleQuotesR,
+  RiLeafLine,
+  RiLightbulbFlashLine
+} from 'react-icons/ri';
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -12,6 +19,14 @@ const BotAvatar: React.FC = () => (
     <RiFlowerFill className="h-5 w-5 text-white" aria-hidden="true" />
   </div>
 );
+
+const ALLOWED_ICONS: Record<string, React.ElementType> = {
+  RiHandHeartLine,
+  // Fix: The icon RiQuotationRightLine does not exist in react-icons/ri. Replaced with RiDoubleQuotesR.
+  RiDoubleQuotesR,
+  RiLeafLine,
+  RiLightbulbFlashLine
+};
 
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = false }) => {
@@ -65,6 +80,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = fals
                 {renderText(message.text)}
               </div>
             ) : null}
+          </div>
+        ) : message.icon && ALLOWED_ICONS[message.icon.name] ? (
+          <div className="flex justify-center items-center">
+            {React.createElement(ALLOWED_ICONS[message.icon.name], {
+                className: 'h-12 w-12 text-white',
+                'aria-hidden': 'true',
+            })}
           </div>
         ) : (
           renderText(message.text)
