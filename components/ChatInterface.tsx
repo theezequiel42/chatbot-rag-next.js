@@ -223,6 +223,12 @@ const ChatInterface: React.FC = () => {
     );
   }
 
+  const isVoiceSupported = typeof window !== 'undefined' && (
+    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) &&
+    'speechSynthesis' in window &&
+    (window as any).AudioContext
+  );
+
   return (
     <div className="flex flex-col flex-grow h-0">
       <div className="flex-grow p-6 overflow-y-auto bg-gray-50">
@@ -267,6 +273,7 @@ const ChatInterface: React.FC = () => {
             className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow disabled:bg-gray-100"
             autoComplete="off"
           />
+          {isVoiceSupported && (
           <button
             type="button"
             onClick={() => setMode('voice')}
@@ -279,6 +286,7 @@ const ChatInterface: React.FC = () => {
               <path d="M3 10a5 5 0 015-5h4a5 5 0 015 5v2a5 5 0 01-5 5H8a5 5 0 01-5-5v-2zM8 9a3 3 0 00-3 3v2a3 3 0 003 3h4a3 3 0 003-3v-2a3 3 0 00-3-3H8z" />
             </svg>
           </button>
+          )}
           <button
             type="submit"
             disabled={isLoading || !input.trim() || showQuickReplies}

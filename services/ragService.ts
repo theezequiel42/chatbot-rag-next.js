@@ -133,7 +133,7 @@ const hasContactIntent = (queryNorm: string): boolean => {
 
 const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const keywordSearch = (query: string, knowledgeBase: KnowledgeChunk[]): ScoredChunk[] => {
+export const keywordSearch = (query: string, knowledgeBase: KnowledgeChunk[]): ScoredChunk[] => {
   const inputNorm = normalizeText(query);
   const queryTokens = expandTokens(inputNorm.split(/\s+/).filter(Boolean));
   const scores: { [id: string]: number } = {};
@@ -178,7 +178,7 @@ const keywordSearch = (query: string, knowledgeBase: KnowledgeChunk[]): ScoredCh
 
 // --- Reciprocal Rank Fusion (RRF) Implementation ---
 
-const reciprocalRankFusion = (resultsLists: ScoredChunk[][], k: number = 60): ScoredChunk[] => {
+export const reciprocalRankFusion = (resultsLists: ScoredChunk[][], k: number = 60): ScoredChunk[] => {
   const fusedScores: { [id: string]: number } = {};
 
   for (const results of resultsLists) {
