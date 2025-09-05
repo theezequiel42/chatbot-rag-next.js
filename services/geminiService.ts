@@ -8,14 +8,18 @@ if (!process.env.API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Safety settings for Gemini to reduce harmful outputs
-// Categories aligned with Gemini safety features.
+// Safety settings for Gemini: allow educational discussion of violence/domestic abuse
+// while keeping strict filters for self-harm, hate and harassment.
+// Notes:
+// - Use BLOCK_ONLY_HIGH for categories that otherwise block legitimate educational content.
 const SAFETY_SETTINGS = [
   { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
   { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-  { category: 'HARM_CATEGORY_SEXUAL', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-  { category: 'HARM_CATEGORY_DANGEROUS', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-  // For self-harm/suicide, be stricter
+  // Permit educational content about sexual/violent/dangerous topics by only blocking high severity
+  { category: 'HARM_CATEGORY_SEXUAL', threshold: 'BLOCK_ONLY_HIGH' },
+  { category: 'HARM_CATEGORY_DANGEROUS', threshold: 'BLOCK_ONLY_HIGH' },
+  { category: 'HARM_CATEGORY_VIOLENCE', threshold: 'BLOCK_ONLY_HIGH' },
+  // For self-harm/suicide, remain strict
   { category: 'HARM_CATEGORY_SELF_HARM', threshold: 'BLOCK_LOW_AND_ABOVE' },
 ];
 
@@ -50,12 +54,21 @@ Pergunta do Usuário: "${message}"
   try {
     return await chat.sendMessageStream({ message: augmentedMessage });
   } catch (err) {
-    console.error('Gemini stream blocked or failed, using fallback:', err);
+    if (import.meta.env.MODE !== 'production') {
+      try {
+        console.error('Gemini stream blocked or failed. Details:', {
+          name: (err as any)?.name,
+          message: (err as any)?.message,
+          status: (err as any)?.status,
+          blockedReason: (err as any)?.blockedReason || (err as any)?.reason,
+        });
+      } catch {}
+    }
     // Fallback friendly message stream following the persona delimiter rules
     const fallback = [
-      'Desculpe, n\u00E3o posso responder esse tipo de conte\u00FAdo.',
-      'Se voc\u00EA estiver em perigo imediato, ligue para **190**.',
-      'Posso te passar informa\u00E7\u00F5es seguras e contatos de apoio em Fraiburgo. O que voc\u00EA precisa saber?'
+      'Desculpe, tive um problema para responder agora.',
+      'Se você estiver em perigo imediato, ligue para **190**.',
+      'Posso falar de violência doméstica de forma informativa e com orientações de segurança. O que você precisa saber?'
     ].join('|||');
 
     // Minimal async-iterable compatible with for-await consumption in UI
