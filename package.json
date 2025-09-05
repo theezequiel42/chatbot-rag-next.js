@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "stickers:webp": "node scripts/convert-stickers-to-webp.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.14.0",
@@ -18,6 +19,7 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
+    "sharp": "^0.33.5",
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",

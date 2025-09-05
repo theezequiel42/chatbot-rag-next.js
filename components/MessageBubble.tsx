@@ -28,6 +28,13 @@ const ALLOWED_ICONS: Record<string, React.ElementType> = {
   RiLightbulbFlashLine
 };
 
+const ICON_LABELS: Record<string, string> = {
+  RiHandHeartLine: 'Mão com coração',
+  RiDoubleQuotesR: 'Aspas duplas',
+  RiLeafLine: 'Folha',
+  RiLightbulbFlashLine: 'Ideia',
+};
+
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = false }) => {
   const [show, setShow] = useState(false);
@@ -74,7 +81,19 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = fals
           </div>
         ) : message.imageUrl ? (
           <div className="flex flex-col items-center">
-            <img src={message.imageUrl} alt="" className="rounded-xl max-w-full h-auto" />
+            <img
+              src={message.imageUrl}
+              alt={message.alt || 'Ilustração'}
+              loading="lazy"
+              decoding="async"
+              className="rounded-xl max-w-full h-auto"
+              onError={(e) => {
+                const img = e.currentTarget as HTMLImageElement;
+                if (img.src.endsWith('.webp')) {
+                  img.src = img.src.replace(/\.webp($|\?)/, '.png$1');
+                }
+              }}
+            />
             {message.text ? (
               <div className="mt-2 w-full text-sm leading-relaxed">
                 {renderText(message.text)}
@@ -83,10 +102,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading = fals
           </div>
         ) : message.icon && ALLOWED_ICONS[message.icon.name] ? (
           <div className="flex justify-center items-center">
-            {React.createElement(ALLOWED_ICONS[message.icon.name], {
-                className: 'h-12 w-12 text-white',
-                'aria-hidden': 'true',
-            })}
+            <span role="img" aria-label={ICON_LABELS[message.icon.name] || 'Ícone'} title={ICON_LABELS[message.icon.name] || 'Ícone'}>
+              {React.createElement(ALLOWED_ICONS[message.icon.name], {
+                  className: 'h-12 w-12 text-white',
+                  'aria-hidden': 'true',
+              })}
+            </span>
           </div>
         ) : (
           renderText(message.text)

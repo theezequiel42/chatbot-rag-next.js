@@ -14,13 +14,13 @@ const QUICK_REPLIES = [
   'Quero apenas conversar.'
 ];
 
-// Sticker mapping: one for each type of violência
-const STICKERS: Record<string, string> = {
-  fisica: '/stickers/fisica.png',
-  psicologica: '/stickers/psicologica.png',
-  sexual: '/stickers/sexual.png',
-  patrimonial: '/stickers/patrimonial.png',
-  moral: '/stickers/moral.png',
+// Sticker metadata: src + accessible alt
+const STICKERS: Record<string, { src: string; alt: string }> = {
+  fisica: { src: '/stickers/fisica.webp', alt: 'Ilustração sobre violência física' },
+  psicologica: { src: '/stickers/psicologica.webp', alt: 'Ilustração sobre violência psicológica' },
+  sexual: { src: '/stickers/sexual.webp', alt: 'Ilustração sobre violência sexual' },
+  patrimonial: { src: '/stickers/patrimonial.webp', alt: 'Ilustração sobre violência patrimonial' },
+  moral: { src: '/stickers/moral.webp', alt: 'Ilustração sobre violência moral' },
 };
 
 
@@ -115,40 +115,49 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     const processMessageText = (text: string) => {
-      if (!text.trim()) return;
+      const raw = text ?? '';
+      if (!raw.trim()) return;
 
-      const trimmed = text.trim();
-      const imgMatch = trimmed.match(/^\[\[img:([a-zA-Z0-9_-]+)\]\]$/);
-      const iconMatch = trimmed.match(/^\[\[icon:([a-zA-Z0-9_-]+)\]\]$/);
+      // Parse the chunk sequentially: emit text and visuals in order
+      const pattern = /\[\[(img|icon):([a-zA-Z0-9_-]+)\]\]/g;
+      let idx = 0;
+      let match: RegExpExecArray | null;
 
-      if (imgMatch) {
-          const key = imgMatch[1].toLowerCase();
-          const url = STICKERS[key];
-          if (url) {
-              const botMessage: ChatMessage = {
-                  id: `bot-${Date.now()}-${Math.random()}`,
-                  text: '',
-                  imageUrl: url,
-                  sender: Sender.Bot,
-              };
-              setMessages((prev) => [...prev, botMessage]);
+      while ((match = pattern.exec(raw)) !== null) {
+        const [full, kind, value] = match;
+        const before = raw.slice(idx, match.index).trim();
+        if (before) {
+          setMessages((prev) => [
+            ...prev,
+            { id: `bot-${Date.now()}-${Math.random()}`, text: before, sender: Sender.Bot },
+          ]);
+        }
+
+        if (kind === 'img') {
+          const key = value.toLowerCase();
+          const meta = STICKERS[key];
+          if (meta) {
+            setMessages((prev) => [
+              ...prev,
+              { id: `bot-${Date.now()}-${Math.random()}`, text: '', imageUrl: meta.src, alt: meta.alt, sender: Sender.Bot },
+            ]);
           }
-      } else if (iconMatch) {
-          const iconName = iconMatch[1];
-          const botMessage: ChatMessage = {
-              id: `bot-${Date.now()}-${Math.random()}`,
-              text: '',
-              icon: { name: iconName },
-              sender: Sender.Bot,
-          };
-          setMessages((prev) => [...prev, botMessage]);
-      } else {
-          const botMessage: ChatMessage = {
-              id: `bot-${Date.now()}-${Math.random()}`,
-              text: trimmed,
-              sender: Sender.Bot,
-          };
-          setMessages((prev) => [...prev, botMessage]);
+        } else if (kind === 'icon') {
+          setMessages((prev) => [
+            ...prev,
+            { id: `bot-${Date.now()}-${Math.random()}`, text: '', icon: { name: value }, sender: Sender.Bot },
+          ]);
+        }
+
+        idx = match.index + full.length;
+      }
+
+      const tail = raw.slice(idx).trim();
+      if (tail) {
+        setMessages((prev) => [
+          ...prev,
+          { id: `bot-${Date.now()}-${Math.random()}`, text: tail, sender: Sender.Bot },
+        ]);
       }
     };
 
@@ -258,14 +267,14 @@ const ChatInterface: React.FC = () => {
             className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow disabled:bg-gray-100"
             autoComplete="off"
           />
-           <button
+          <button
             type="button"
             onClick={() => setMode('voice')}
             disabled={isLoading}
             className="text-gray-500 font-semibold w-12 h-12 rounded-full hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
             aria-label="Ativar bate-papo por voz"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
               <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm-1 4a1 1 0 00-1 1v2a1 1 0 102 0v-2a1 1 0 00-1-1zm10-1a1 1 0 100 2v-2a1 1 0 100-2zM9 4a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
               <path d="M3 10a5 5 0 015-5h4a5 5 0 015 5v2a5 5 0 01-5 5H8a5 5 0 01-5-5v-2zM8 9a3 3 0 00-3 3v2a3 3 0 003 3h4a3 3 0 003-3v-2a3 3 0 00-3-3H8z" />
             </svg>
@@ -276,7 +285,7 @@ const ChatInterface: React.FC = () => {
             className="bg-pink-600 text-white font-semibold w-12 h-12 rounded-full hover:bg-pink-700 disabled:bg-pink-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
             aria-label="Enviar mensagem"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
             </svg>
           </button>
