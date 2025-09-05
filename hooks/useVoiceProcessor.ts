@@ -73,15 +73,28 @@ export const useVoiceProcessor = () => {
         return;
       }
 
+      // Prefer Brazilian Portuguese voices
       const ptBrVoices = voices.filter(voice => voice.lang === 'pt-BR');
-      if (!ptBrVoices.length) return;
+      const ptGeneric = voices.filter(voice => voice.lang?.startsWith('pt'));
+      const candidates = ptBrVoices.length ? ptBrVoices : ptGeneric;
+      if (!candidates.length) return;
 
-      // Prioritize voices that are explicitly female or have common Brazilian female names
-      const femaleVoice = ptBrVoices.find(voice =>
-        /female|feminino|mulher|maria|ana|camila|luciana|helena|isabela|manuela|clara|sofia|laura/i.test(voice.name)
-      );
-      
-      setPreferredVoice(femaleVoice || ptBrVoices[0]); // Fallback to the first pt-BR voice
+      // Score voices by naturalness hints and vendor quality
+      const scoreVoice = (v: SpeechSynthesisVoice) => {
+        let s = 0;
+        const name = v.name || '';
+        if (v.localService === false) s += 5; // cloud voices tend to be neural
+        if (/(Natural|Neural|Online|Cloud)/i.test(name)) s += 4;
+        if (/(Microsoft|Google|Amazon|Apple|Siri)/i.test(name)) s += 3;
+        if (/(Brazil|Brasil|BR)/i.test(name)) s += 1;
+        if (/(Compact|Legacy)/i.test(name)) s -= 2;
+        // Prefer some common, good-sounding pt-BR names
+        if (/(maria|ana|camila|luciana|helena|isabela|manuela|clara|sofia|laura|helo[ií]sa)/i.test(name)) s += 2;
+        return s;
+      };
+
+      const best = [...candidates].sort((a, b) => scoreVoice(b) - scoreVoice(a))[0];
+      setPreferredVoice(best);
     };
 
     getAndSetVoice(); // Initial attempt in case voices are already loaded
@@ -204,24 +217,94 @@ export const useVoiceProcessor = () => {
     };
   }, [cleanup]);
 
+  const speakTokenRef = useRef(0);
+
   const speak = useCallback((text: string, onEnd: () => void) => {
-    speechSynthesis.cancel(); // Cancel any previous speech
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 1.1;
-    utterance.pitch = 1.0;
+    // Cancel any previous speech and advance token to invalidate pending chunks
+    speechSynthesis.cancel();
+    const token = ++speakTokenRef.current;
 
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
+    // Normalize and chunk text to add natural pauses and allow subtle prosody tweaks
+    const normalizeText = (t: string) =>
+      t
+        .replace(/[\u2022\u2023\u25E6\u2043\u2219]/g, '•') // bullets to dot
+        .replace(/[\r\n]+/g, ' ') // collapse newlines
+        .replace(/\s{2,}/g, ' ') // extra spaces
+        .replace(/\s*([,;:.!?])\s*/g, '$1 ') // tidy spaces around punctuation
+        .trim();
+
+    const splitIntoChunks = (t: string) => {
+      const parts = t
+        .split(/(?<=[.!?])\s+(?=[A-ZÀ-ÚÃÕÂÊÎÔÛÁÉÍÓÚÇ0-9“"']|•)/g) // sentence-ish
+        .flatMap(p => p.split(/(?<=;|:)\s+/g)); // split on strong pauses
+      // Merge tiny fragments into neighbors
+      const merged: string[] = [];
+      for (const p of parts) {
+        const x = p.trim();
+        if (!x) continue;
+        if (merged.length && (x.length < 16 || /^(e|ou|mas|que)\b/i.test(x))) {
+          merged[merged.length - 1] += ' ' + x;
+        } else {
+          merged.push(x);
+        }
+      }
+      return merged;
+    };
+
+    const isNumberHeavy = (s: string) => /\d|%|R\$|\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b/.test(s);
+
+    const chunks = splitIntoChunks(normalizeText(text));
+    if (!chunks.length) {
+      onEnd();
+      return undefined;
     }
 
-    utterance.onend = onEnd;
-    utterance.onerror = (e) => {
-        console.error("SpeechSynthesis Error", e);
-        onEnd(); // Ensure state machine continues
-    }
-    speechSynthesis.speak(utterance);
-    return utterance;
+    const baseRate = 1.0; // slightly slower than before for naturalness
+    const basePitch = 1.0;
+
+    let firstUtterance: SpeechSynthesisUtterance | undefined;
+
+    const speakChunk = (idx: number) => {
+      if (token !== speakTokenRef.current) return; // superseded
+      if (idx >= chunks.length) {
+        onEnd();
+        return;
+      }
+
+      const chunk = chunks[idx];
+      const u = new SpeechSynthesisUtterance(chunk);
+      u.lang = 'pt-BR';
+
+      // Subtle variation per chunk to reduce monotony
+      const jitter = (min: number, max: number) => min + Math.random() * (max - min);
+      const rateAdj = isNumberHeavy(chunk) ? 0.92 : jitter(0.97, 1.05);
+      const pitchAdj = jitter(0.96, 1.04);
+      u.rate = Math.max(0.8, Math.min(1.3, baseRate * rateAdj));
+      u.pitch = Math.max(0.8, Math.min(1.2, basePitch * pitchAdj));
+      u.volume = 1.0;
+
+      if (preferredVoice) {
+        u.voice = preferredVoice;
+      }
+
+      u.onerror = (e) => {
+        console.error('SpeechSynthesis Error', e);
+        // Try to continue with next chunk instead of aborting the whole speak
+        setTimeout(() => speakChunk(idx + 1), 0);
+      };
+      u.onend = () => {
+        if (token !== speakTokenRef.current) return;
+        // Brief pause between chunks to simulate breath
+        const gap = isNumberHeavy(chunk) ? 140 : 90;
+        setTimeout(() => speakChunk(idx + 1), gap);
+      };
+
+      if (!firstUtterance) firstUtterance = u;
+      speechSynthesis.speak(u);
+    };
+
+    speakChunk(0);
+    return firstUtterance;
   }, [preferredVoice]);
 
   return { isListening, transcript, frequencyData, startListening, stopListening, speak, setTranscript };
