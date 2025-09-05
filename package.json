@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "precompute:embeddings": "node --loader ts-node/esm scripts/precompute-embeddings.ts",
-    "prebuild": "npm run precompute:embeddings",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "stickers:webp": "node scripts/convert-stickers-to-webp.mjs"
+    "stickers:webp": "node scripts/convert-stickers-to-webp.mjs",
+    "test": "tsx tests/**/*.test.ts"
   },
   "dependencies": {
     "@google/genai": "^1.14.0",
@@ -21,8 +20,7 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
-    "@tensorflow/tfjs-node": "^4.22.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "sharp": "^0.33.5",
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.12",

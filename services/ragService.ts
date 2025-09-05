@@ -56,30 +56,19 @@ export const initializeRag = async (): Promise<void> => {
     return;
   }
 
-  // Try loading precomputed embeddings first
-  try {
-    const res = await fetch('/embeddings.json', { cache: 'force-cache' });
-    if (!res.ok) throw new Error(`Failed to fetch embeddings.json: ${res.status}`);
-    const data = await res.json();
-    const map: Record<string, number[]> = {};
-    for (const e of data.entries || []) {
-      map[e.id] = e.embedding;
-    }
-    vectorizedKnowledgeBase = KNOWLEDGE_BASE.map(chunk => ({
-      chunk,
-      embedding: map[chunk.id],
-    })).filter(v => Array.isArray(v.embedding));
-    if (!vectorizedKnowledgeBase.length) throw new Error('No embeddings mapped');
-    console.log(`Loaded ${vectorizedKnowledgeBase.length} precomputed embeddings.`);
-  } catch (e) {
-    console.warn('Precomputed embeddings not available, falling back to client-side generation.', e);
-    // Fallback: client-side generation (slower). Only run if needed.
-    await loadEmbeddingModel();
-    const textsToEmbed = KNOWLEDGE_BASE.map(chunk => `${chunk.title}\n${chunk.content}`);
+  // Always generate embeddings on the client (previous behavior)
+  await loadEmbeddingModel();
+  const textsToEmbed = KNOWLEDGE_BASE.map(
+    chunk => `${chunk.title}\n${chunk.content}`
+  );
+  if (import.meta.env.MODE !== 'production') {
     console.log(`Generating embeddings for ${KNOWLEDGE_BASE.length} chunks...`);
-    const embeddings = await embed(textsToEmbed);
-    vectorizedKnowledgeBase = KNOWLEDGE_BASE.map((chunk, i) => ({ chunk, embedding: embeddings[i] }));
   }
+  const embeddings = await embed(textsToEmbed);
+  vectorizedKnowledgeBase = KNOWLEDGE_BASE.map((chunk, i) => ({
+    chunk: chunk,
+    embedding: embeddings[i],
+  }));
 
   // Build contact entity phrases from titles for boosting during retrieval
   contactEntityPhrases = KNOWLEDGE_BASE
@@ -95,7 +84,9 @@ export const initializeRag = async (): Promise<void> => {
     .filter(e => !!e.phrase);
 
   isInitialized = true;
-  console.log('RAG service initialized successfully.');
+  if (import.meta.env.MODE !== 'production') {
+    console.log('RAG service initialized successfully.');
+  }
 };
 
 // --- Keyword Search Implementation ---
@@ -271,3 +262,4 @@ export const retrieveContext = async (query: string, topK: number = 5): Promise<
     .map(c => `TÍTULO: ${c.chunk.title}\nCONTEÚDO:\n${c.chunk.content}`)
     .join('\n\n---\n\n');
 };
+

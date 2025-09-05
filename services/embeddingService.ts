@@ -1,7 +1,8 @@
 // services/embeddingService.ts
+import * as tf from '@tensorflow/tfjs';
+import * as use from '@tensorflow-models/universal-sentence-encoder';
+
 let model: any = null;
-let tfModule: any = null;
-let useModule: any = null;
 
 /**
  * Loads the Universal Sentence Encoder model.
@@ -11,19 +12,16 @@ export const loadEmbeddingModel = async () => {
   if (model) {
     return;
   }
-  console.log('Loading embedding model...');
+  if (import.meta.env.MODE !== 'production') {
+    console.log('Loading embedding model...');
+  }
   try {
-    // Lazy-load TFJS and USE only when needed on client
-    if (!tfModule) {
-      tfModule = await import('@tensorflow/tfjs');
-    }
-    if (!useModule) {
-      useModule = await import('@tensorflow-models/universal-sentence-encoder');
-    }
     // Suppress TensorFlow.js warnings in the console for a cleaner user experience
-    tfModule.env().set('PROD', true);
-    model = await useModule.load();
-    console.log('Embedding model loaded successfully.');
+    tf.env().set('PROD', true);
+    model = await use.load();
+    if (import.meta.env.MODE !== 'production') {
+      console.log('Embedding model loaded successfully.');
+    }
   } catch (error) {
     console.error('Failed to load embedding model:', error);
     throw new Error('Could not load the embedding model. RAG features will be disabled.');
