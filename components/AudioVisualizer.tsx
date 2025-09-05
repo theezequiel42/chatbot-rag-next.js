@@ -1,6 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { VoiceState } from './VoiceInterface';
 
 const vertexShader = `
@@ -129,11 +127,11 @@ interface AudioVisualizerProps {
 
 const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ frequencyData, interactionState, onClick }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const sceneRef = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const meshRef = useRef<THREE.Mesh | null>(null);
-  const controlsRef = useRef<OrbitControls | null>(null);
+  const rendererRef = useRef<any>(null);
+  const sceneRef = useRef<any>(null);
+  const cameraRef = useRef<any>(null);
+  const meshRef = useRef<any>(null);
+  const controlsRef = useRef<any>(null);
   const isInitializedRef = useRef(false);
 
   // Use a ref to pass the latest props to the animation loop without re-triggering the setup effect
@@ -148,7 +146,11 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ frequencyData, intera
     const currentMount = mountRef.current;
     let animationFrameId: number;
 
-    const init = (width: number, height: number) => {
+    const init = async (width: number, height: number) => {
+      // Dynamic import Three and controls
+      const THREE = await import('three');
+      const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
+
       // Scene
       const scene = new THREE.Scene();
       sceneRef.current = scene;

@@ -55,20 +55,31 @@ export const initializeRag = async (): Promise<void> => {
   if (isInitialized) {
     return;
   }
-  
-  await loadEmbeddingModel();
 
-  const textsToEmbed = KNOWLEDGE_BASE.map(
-    chunk => `${chunk.title}\n${chunk.content}`
-  );
-  
-  console.log(`Generating embeddings for ${KNOWLEDGE_BASE.length} chunks...`);
-  const embeddings = await embed(textsToEmbed);
-
-  vectorizedKnowledgeBase = KNOWLEDGE_BASE.map((chunk, i) => ({
-    chunk: chunk,
-    embedding: embeddings[i],
-  }));
+  // Try loading precomputed embeddings first
+  try {
+    const res = await fetch('/embeddings.json', { cache: 'force-cache' });
+    if (!res.ok) throw new Error(`Failed to fetch embeddings.json: ${res.status}`);
+    const data = await res.json();
+    const map: Record<string, number[]> = {};
+    for (const e of data.entries || []) {
+      map[e.id] = e.embedding;
+    }
+    vectorizedKnowledgeBase = KNOWLEDGE_BASE.map(chunk => ({
+      chunk,
+      embedding: map[chunk.id],
+    })).filter(v => Array.isArray(v.embedding));
+    if (!vectorizedKnowledgeBase.length) throw new Error('No embeddings mapped');
+    console.log(`Loaded ${vectorizedKnowledgeBase.length} precomputed embeddings.`);
+  } catch (e) {
+    console.warn('Precomputed embeddings not available, falling back to client-side generation.', e);
+    // Fallback: client-side generation (slower). Only run if needed.
+    await loadEmbeddingModel();
+    const textsToEmbed = KNOWLEDGE_BASE.map(chunk => `${chunk.title}\n${chunk.content}`);
+    console.log(`Generating embeddings for ${KNOWLEDGE_BASE.length} chunks...`);
+    const embeddings = await embed(textsToEmbed);
+    vectorizedKnowledgeBase = KNOWLEDGE_BASE.map((chunk, i) => ({ chunk, embedding: embeddings[i] }));
+  }
 
   // Build contact entity phrases from titles for boosting during retrieval
   contactEntityPhrases = KNOWLEDGE_BASE
