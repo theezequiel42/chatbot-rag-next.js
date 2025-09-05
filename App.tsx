@@ -7,9 +7,9 @@ const App: React.FC = () => {
     // Change favicon and title to something generic
     let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
     if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.head.appendChild(link);
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
     }
     link.href = 'https://www.google.com/favicon.ico';
     document.title = 'Google';
@@ -28,6 +28,11 @@ const App: React.FC = () => {
           <h1 className="text-xl font-bold">Rosa Amiga</h1>
           <p className="text-sm opacity-90">Apoio e conscientização contra a violência doméstica</p>
         </div>
+        <nav className="hidden sm:flex items-center gap-3 mr-2">
+          <a href="/help.html" className="text-white/90 hover:text-white text-sm underline-offset-2 hover:underline">Ajuda</a>
+          <a href="/privacy.html" className="text-white/90 hover:text-white text-sm underline-offset-2 hover:underline">Privacidade</a>
+          <a href="/terms.html" className="text-white/90 hover:text-white text-sm underline-offset-2 hover:underline">Termos</a>
+        </nav>
         <button
           onClick={handleQuickExit}
           className="p-2 rounded-full hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
@@ -40,9 +45,9 @@ const App: React.FC = () => {
       </header>
       <ChatInterface />
       <footer className="text-center p-3 text-xs text-gray-600 border-t flex-shrink-0 flex items-center justify-center space-x-2">
-         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-          </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
+        </svg>
         <p>Este é um espaço seguro. Se você estiver em perigo imediato, **ligue para 190**.</p>
       </footer>
     </div>
@@ -50,6 +55,4 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
 

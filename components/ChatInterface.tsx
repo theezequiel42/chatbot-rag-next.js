@@ -199,19 +199,19 @@ const ChatInterface: React.FC = () => {
   };
   
   const handleFormSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      handleSendMessage(input);
+    e.preventDefault();
+    handleSendMessage(input);
   }
   
   if (mode === 'voice') {
-      return <VoiceInterface onExit={() => setMode('text')} chat={chat} />;
+    return <VoiceInterface onExit={() => setMode('text')} chat={chat} />;
   }
 
   if (isInitializing || initError) {
     return (
       <div className="flex flex-col flex-grow h-0 items-center justify-center text-center p-4">
         <div className="w-12 h-12 mb-4 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center animate-pulse">
-            <RiFlowerFill size={24} color="white" />
+          <RiFlowerFill size={24} color="white" />
         </div>
         <p className="font-semibold text-lg text-gray-700">
           {initError ? 'Ocorreu um Erro' : 'Preparando assistente...'}
@@ -237,13 +237,13 @@ const ChatInterface: React.FC = () => {
             <MessageBubble key={msg.id} message={msg} />
           ))}
           {isLoading && messages[messages.length - 1]?.sender === Sender.User && (
-             <MessageBubble 
+            <MessageBubble 
               message={{id: 'loading', sender: Sender.Bot, text: ''}} 
               isLoading={true} 
             />
           )}
           {showQuickReplies && (
-             <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2 animate-fade-in-up">
+            <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2 animate-fade-in-up">
               {QUICK_REPLIES.map((reply) => (
                 <button
                   key={reply}
@@ -274,18 +274,18 @@ const ChatInterface: React.FC = () => {
             autoComplete="off"
           />
           {isVoiceSupported && (
-          <button
-            type="button"
-            onClick={() => setMode('voice')}
-            disabled={isLoading}
-            className="text-gray-500 font-semibold w-12 h-12 rounded-full hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
-            aria-label="Ativar bate-papo por voz"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
-              <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm-1 4a1 1 0 00-1 1v2a1 1 0 102 0v-2a1 1 0 00-1-1zm10-1a1 1 0 100 2v-2a1 1 0 100-2zM9 4a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-              <path d="M3 10a5 5 0 015-5h4a5 5 0 015 5v2a5 5 0 01-5 5H8a5 5 0 01-5-5v-2zM8 9a3 3 0 00-3 3v2a3 3 0 003 3h4a3 3 0 003-3v-2a3 3 0 00-3-3H8z" />
-            </svg>
-          </button>
+            <button
+              type="button"
+              onClick={() => setMode('voice')}
+              disabled={isLoading}
+              className="text-gray-500 font-semibold w-12 h-12 rounded-full hover:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 flex items-center justify-center flex-shrink-0"
+              aria-label="Ativar bate-papo por voz"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
+                <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm-1 4a1 1 0 00-1 1v2a1 1 0 102 0v-2a1 1 0 00-1-1zm10-1a1 1 0 100 2v-2a1 1 0 100-2zM9 4a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
+                <path d="M3 10a5 5 0 015-5h4a5 5 0 015 5v2a5 5 0 01-5 5H8a5 5 0 01-5-5v-2zM8 9a3 3 0 00-3 3v2a3 3 0 003 3h4a3 3 0 003-3v-2a3 3 0 00-3-3H8z" />
+              </svg>
+            </button>
           )}
           <button
             type="submit"
@@ -304,3 +304,4 @@ const ChatInterface: React.FC = () => {
 };
 
 export default ChatInterface;
+
